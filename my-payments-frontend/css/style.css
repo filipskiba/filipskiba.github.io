@@ -1,0 +1,12 @@
+body{
+    background: #333;
+    color: #fff;
+}
+.navbar{
+    border-bottom: #008ed6 3px solid;
+    opacity: 0.8;
+}
+
+.main{
+    margin-top: 50px;
+}
