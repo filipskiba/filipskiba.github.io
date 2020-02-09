@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     var apiRoot = 'https://pacific-castle-21497.herokuapp.com/api/contractors';
 
     getAllContractors();
@@ -17,6 +17,7 @@ $(document).ready(function() {
                 .appendTo($('#contractors-table-body'));
         });
     }
+
     function createElement(data) {
 
         var $tr = $('<tr>').append(
@@ -25,7 +26,6 @@ $(document).ready(function() {
             $('<td>').text(data.nipId),
             $('<td><button class="btn btn-success" id="edit-contractor-button">edit</button>'),
             $('<td><button class="btn btn-danger" id="delete-contractor-button">delete</button>')
-
         );
         return $tr;
     }
@@ -128,5 +128,6 @@ $(document).ready(function() {
             }
         });
     }
+
     //************************************************CRUD**************************************************************
 });

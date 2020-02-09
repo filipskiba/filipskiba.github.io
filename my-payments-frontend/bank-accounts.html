@@ -13,8 +13,8 @@
     <link rel="stylesheet" href="css/style.css">
     <title>Kontrahenci</title>
 </head>
-<body>
 
+<body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="index.html">Moje płatności</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -33,6 +33,10 @@
     </div>
 </nav>
 
+<select  id="contractors-combobox" name="contractorId" name="Kontrahent" >
+    <option disabled selected>--- wybierz kontrahenta ---</option>
+</select>
+
 <div class="main">
     <div class="home-inner container">
 
@@ -40,24 +44,20 @@
             <div class="col-md-4">
                 <div class="card bg-primary text-center card-form">
                     <div class="card-body">
-                        <h3>Dodaj kontrahenta</h3>
-                        <p>Wypełnij ten formularz aby dodać nowego kontrahenta</p>
+                        <h3>Dodaj konto bankowe</h3>
+                        <p>Wypełnij ten formularz aby dodać konto bankowe</p>
                         <form
-                                action="https://pacific-castle-21497.herokuapp.com/api/contractors"
-                                data-contractor-add-form
+                                action="https://pacific-castle-21497.herokuapp.com/api/bankAccounts"
+                                data-bank-accounts-add-form
                                 method="POST"
                         >
                             <div class="form-group">
-                                <input class="form-control form-control-lg" name="contractorName"
-                                       placeholder="Nazwa kontrahenta"
-                                       type="text">
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control form-control-lg" name="nipId" placeholder="Numer nip"
+                                <input class="form-control form-control-lg" name="bankAccountNumber"
+                                       placeholder="Numer konta bankowego"
                                        type="text">
                             </div>
 
-                            <input class="btn btn-outline-light btn-block" id="add_contractor" type="submit"
+                            <input class="btn btn-outline-light btn-block" id="add_bank_account" type="submit"
                                    value="Submit">
                         </form>
                     </div>
@@ -70,15 +70,13 @@
                     <table class="table">
                         <thead class="thead-light">
                         <tr>
-                            <th scope="col">id</th>
-                            <th scope="col">Nazwa kontrahenta</th>
-                            <th scope="col">Numer nip</th>
+                            <th scope="col">Numer konta</th>
                             <th scope="col">Edytuj</th>
                             <th scope="col">Usuń</th>
 
                         </tr>
                         </thead>
-                        <tbody id="contractors-table-body">
+                        <tbody id="bank-accounts-table-body">
 
                         </tbody>
                     </table>
@@ -88,55 +86,50 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
 
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" role="dialog">
-        <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button class="close" data-dismiss="modal" type="button">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="card bg-primary text-center card-form">
-                        <div class="card-body">
-                            <h3>Edytuj kontrahenta </h3>
-                            <div class="form-group">
-                                <input class="form-control form-control-lg" id="edit_id" name="edit-id"
-                                       placeholder="Id"
-                                       readonly type="text">
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control form-control-lg" id="edit_contractor_name" name="edit-contractor-name"
-                                       placeholder="Nazwa kontrahenta"
-                                       type="text">
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control form-control-lg" id="edit_contractor_nip" name="edit-nip-id"
-                                       placeholder="Numer nip"
-                                       type="text">
-                            </div>
-                            <button class="btn btn-outline-light btn-block" id="edit_contractor">Uaktualnij</button>
-
-
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" type="button">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="card bg-primary text-center card-form">
+                    <div class="card-body">
+                        <h3>Edytuj konto bankowe </h3>
+                        <div class="form-group">
+                            <input class="form-control form-control-lg" id="edit_id" name="edit-id"
+                                   placeholder="Id"
+                                   readonly type="text">
                         </div>
+                        <div class="form-group">
+                            <input class="form-control form-control-lg" id="edit_bank_account_number" name="edit-bank-account-number"
+                                   placeholder="Numer konta bankowego"
+                                   type="text">
+                        </div>
+                        <button class="btn btn-outline-light btn-block" id="edit_bank_account">Uaktualnij</button>
+
+
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal" type="button">Zamknij</button>
-                </div>
             </div>
-
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" type="button">Zamknij</button>
+            </div>
         </div>
+
     </div>
+</div>
+
 
 
 
 
 
 <script src="jquery-3.4.1.min.js"></script>
-<script src="contractors-controller.js"></script>
+<script src="bank-accounts-controller.js"></script>
 
 <script crossorigin="anonymous"
         integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
