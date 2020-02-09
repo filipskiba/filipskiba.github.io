@@ -1,5 +1,6 @@
 $(document).ready(function () {
     var contractorsApi = 'https://pacific-castle-21497.herokuapp.com/api/contractors';
+    var contractorStatusApi = 'https://pacific-castle-21497.herokuapp.com/api/contractors/status';
     var bankAccountApi = 'https://pacific-castle-21497.herokuapp.com/api/bankAccounts';
     getAllContractors();
 
@@ -92,6 +93,41 @@ $(document).ready(function () {
             success: fillContractorsCombobox
         });
     }
+    function getContractorStatus(contractorId) {
+        $.ajax({
+            url: contractorStatusApi+"/"+contractorId,
+            method: 'GET',
+            success: function (response) {
+                if(response==1){
+                    $("#snoAlertBoxTrue").fadeIn();
+                    closeAlertTrue();
+                }
+                else{
+                    $("#snoAlertBoxFalse").fadeIn();
+                    closeAlertFalse();
+                }
+            },
+            error: function(){
+                $("#snoAlertBoxError").fadeIn();
+                closeAlertError();
+            }
+        });
+    }
+    function closeAlertTrue(){
+        window.setTimeout(function () {
+            $("#snoAlertBoxTrue").fadeOut(300)
+        }, 3000);
+    }
+    function closeAlertFalse(){
+        window.setTimeout(function () {
+            $("#snoAlertBoxFalse").fadeOut(300)
+        }, 3000);
+    }
+    function closeAlertError(){
+        window.setTimeout(function () {
+            $("#snoAlertBoxError").fadeOut(300)
+        }, 3000);
+    }
 
     function deleteBankAccount(bankAccountId) {
         var selectedId = $("#contractors-combobox option:selected").val();
@@ -124,6 +160,7 @@ $(document).ready(function () {
             complete: function (data) {
                 if (data.status === 200) {
                     getBankAccountsByContractorId(selectedId);
+                    getContractorStatus(selectedId)
                 }
             }
         });

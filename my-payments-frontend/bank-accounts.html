@@ -33,12 +33,8 @@
     </div>
 </nav>
 
-<select  id="contractors-combobox" name="contractorId" name="Kontrahent" >
-    <option disabled selected>--- wybierz kontrahenta ---</option>
-</select>
-
 <div class="main">
-    <div class="home-inner container">
+    <div class="container-fluid">
 
         <div class="row">
             <div class="col-md-4">
@@ -51,6 +47,12 @@
                                 data-bank-accounts-add-form
                                 method="POST"
                         >
+                            <div class="form-group">
+                            <select id="contractors-combobox" class="custom-select" name="Kontrahent">
+                                <option disabled selected>--- wybierz kontrahenta ---</option>
+                            </select>
+                            </div>
+
                             <div class="form-group">
                                 <input class="form-control form-control-lg" name="bankAccountNumber"
                                        placeholder="Numer konta bankowego"
@@ -86,7 +88,6 @@
 </div>
 
 
-
 <!-- Modal -->
 <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
@@ -106,7 +107,8 @@
                                    readonly type="text">
                         </div>
                         <div class="form-group">
-                            <input class="form-control form-control-lg" id="edit_bank_account_number" name="edit-bank-account-number"
+                            <input class="form-control form-control-lg" id="edit_bank_account_number"
+                                   name="edit-bank-account-number"
                                    placeholder="Numer konta bankowego"
                                    type="text">
                         </div>
@@ -124,9 +126,13 @@
     </div>
 </div>
 
-
-
-
+<div id="snoAlertBoxTrue" class="alert alert-success" data-alert="alert">Kontrahent oraz jego konta bankowe znajdują się
+    na białej liście
+</div>
+<div id="snoAlertBoxFalse" class="alert alert-danger" data-alert="alert">Podany kontrahent oraz jedno lub więcej jego
+    kont bankowych nie znajdują się na białej liście
+</div>
+<div id="snoAlertBoxError" class="alert alert-danger" data-alert="alert">Nieprawidłowy nip lub konto bankowe</div>
 
 
 <script src="jquery-3.4.1.min.js"></script>
