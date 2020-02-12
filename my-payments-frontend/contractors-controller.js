@@ -24,8 +24,8 @@ $(document).ready(function () {
             $('<td>').text(data.contractorId),
             $('<td>').text(data.contractorName),
             $('<td>').text(data.nipId),
-            $('<td><button class="btn btn-success" id="edit-contractor-button">edit</button>'),
-            $('<td><button class="btn btn-danger" id="delete-contractor-button">delete</button>')
+            $('<td><button class="btn btn-success" id="edit-contractor-button">edytuj</button>'),
+            $('<td><button class="btn btn-danger" id="delete-contractor-button">usuń</button>')
         );
         return $tr;
     }

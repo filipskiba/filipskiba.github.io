@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <link href='lib/dist/css/bootstrap-datepicker.standalone.css' rel='stylesheet' type='text/css'>
+
+
+    <title>Rozrachunki</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="index.html">Moje płatności</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="contractors.html">Kotrahenci</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="bank-accounts.html">Konta bankowe</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="settlements.html">Rozrachunki</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="payments.html">Płatności</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="statuses.html">Statusy kontrahentów</a>
+            </li>
+
+        </ul>
+    </div>
+</nav>
+
+<div class="main">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card bg-primary text-center card-form">
+                    <div class="card-body">
+                        <h3>Dodaj rozrachunek</h3>
+                        <p>Wypełnij ten formularz aby dodać rozrachunek</p>
+                        <form
+                                action="https://pacific-castle-21497.herokuapp.com/api/settlements"
+                                data-settlements-add-form
+                                method="POST"
+                        >
+                            <div class="form-group">
+                                <select id="contractors-combobox" class="custom-select" name="Kontrahent">
+                                    <option disabled selected>--- wybierz kontrahenta ---</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <input class="form-control form-control-lg" name="document"
+                                       placeholder="Dokument"
+                                       type="text">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="input-group date" data-provide="datepicker">
+                                    <input type="text" name="date-of-issue" class="form-control"
+                                           placeholder="Data wystawienia">
+                                    <div class="input-group-addon">
+                                        <span class="glyphicon glyphicon-th"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="input-group date" data-provide="datepicker">
+                                    <input type="text" name="date-of-payment" class="form-control"
+                                           placeholder="termin płatności">
+                                    <div class="input-group-addon">
+                                        <span class="glyphicon glyphicon-th"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <input class="form-control form-control-lg" name="amount"
+                                       placeholder="Kwota"
+                                       type="number" min="0" value="0" step=".01">
+
+                            </div>
+
+
+                            <input class="btn btn-outline-light btn-block" id="add_settlement" type="submit"
+                                   value="Submit">
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Kontrahent</th>
+                            <th scope="col">Dokument</th>
+                            <th scope="col">Data wyst.</th>
+                            <th scope="col">Data płat.</th>
+                            <th scope="col">kwota</th>
+                            <th scope="col">zapłacono</th>
+                            <th scope="col">uregulowano</th>
+                            <th scope="col">edycja</th>
+                            <th scope="col">usuń</th>
+
+                        </tr>
+                        </thead>
+                        <tbody id="settlements-table-body">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" type="button">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="card bg-primary text-center card-form">
+                    <div class="card-body">
+                        <h3>Edytuj rozrachunek </h3>
+
+                        <div class="form-group">
+                            <input class="form-control form-control-lg" id="edit-id"
+                                   placeholder="Id"
+                                   readonly type="hidden">
+                        </div>
+
+                        <div class="form-group">
+                            <input class="form-control form-control-lg" id="contractor-id"
+                                   placeholder="id"
+                                   readonly type="hidden">
+                        </div>
+
+                        <div class="form-group">
+                            <input class="form-control form-control-lg" id="edit-document"
+                                   placeholder="Dokument"
+                                   type="text">
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-group date" data-provide="datepicker">
+                                <input type="text" class="form-control" id="edit-date-of-issue"
+                                       placeholder="Data wystawienia">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-group date" data-provide="datepicker">
+                                <input type="text" class="form-control" id="edit-date-of-payment"
+                                       placeholder="termin płatności">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input class="form-control form-control-lg" id="edit-amount"
+                                   placeholder="Kwota"
+                                   type="number" min="0" value="0" step=".01">
+
+                        </div>
+                        <button class="btn btn-outline-light btn-block" id="edit_settlement">Uaktualnij</button>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" type="button">Zamknij</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="jquery-3.4.1.min.js"></script>
+<script src='lib/dist/js/bootstrap-datepicker.min.js' type='text/javascript'></script>
+<script src="settlements-controller.js"></script>
+
+<script crossorigin="anonymous"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>

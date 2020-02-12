@@ -50,8 +50,8 @@ $(document).ready(function () {
             $('<td>').text(data.bankAccountId).hide(),
             $('<td>').text(data.contractorId).hide(),
             $('<td>').text(data.bankAccountNumber),
-            $('<td><button class="btn btn-success" id="edit-bank-account-button">edit</button>'),
-            $('<td><button class="btn btn-danger" id="delete-bank-account-button">delete</button>')
+            $('<td><button class="btn btn-success" id="edit-bank-account-button">edytuj</button>'),
+            $('<td><button class="btn btn-danger" id="delete-bank-account-button">usuń</button>')
         );
         return $tr;
     }
@@ -59,7 +59,6 @@ $(document).ready(function () {
     $('#bank-accounts-table-body').on("click", "#delete-bank-account-button", function (event) {
         var curentRow = $(this).closest('tr');
         var id_col = curentRow.find('td:eq(0)').text();
-        console.log(id_col);
         deleteBankAccount(id_col);
     });
 
@@ -137,6 +136,7 @@ $(document).ready(function () {
             success: function () {
                 $('#rows').empty()
                 getBankAccountsByContractorId(selectedId)
+                getContractorStatus(selectedId)
                 // parentEl.slideUp(400, function() { parentEl.remove(); });
             }
         })
@@ -187,6 +187,7 @@ $(document).ready(function () {
             }),
             success: function (data) {
                 getBankAccountsByContractorId(selectedId)
+                getContractorStatus(selectedId)
                 $('#myModal').modal('hide');
             }
         });

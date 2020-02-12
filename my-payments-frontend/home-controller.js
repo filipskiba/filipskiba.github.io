@@ -19,15 +19,13 @@ $(document).ready(function () {
                 .appendTo($('#rates-table-body'));
         });
     }
+
     function createElement(data) {
         var $tr = $('<tr>').append(
             $('<td>').text(data.currency),
             $('<td>').text(data.code),
             $('<td>').text(data.mid)
-
         );
         return $tr;
     }
-
-
 });
