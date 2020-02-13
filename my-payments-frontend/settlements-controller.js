@@ -7,6 +7,21 @@ $(document).ready(function () {
 
 
     $.fn.datepicker.defaults.format = "yyyy-mm-dd";
+    $.fn.datepicker.defaults.autoclose = true;
+    $.fn.datepicker.dates['pl'] = {
+        days: ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"],
+        daysShort: ["Pn", "Wt", "Śr", "Czw", "Pt", "Sb", "Nd"],
+        daysMin: ["Pn", "Wt", "Śr", "Czw", "Pt", "Sb", "Nd"],
+        months: ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"],
+        monthsShort: ["St", "Lut", "Marz", "Kw", "Maj", "Czer", "Lip", "Sier", "Wrz", "Paź", "List", "Grudz"],
+        today: "Dzisiaj",
+        clear: "Wyczyść",
+        format: "yyyy-mm-dd",
+        titleFormat: "MM yyyy", /* Leverages same syntax as 'format' */
+        weekStart: 0
+    };
+    $.fn.datepicker.defaults.language = 'pl';
+
     $("#datapicker").datepicker();
     $("#date-of-payment").datepicker();
 
