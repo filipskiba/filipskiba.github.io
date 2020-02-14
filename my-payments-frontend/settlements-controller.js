@@ -70,15 +70,15 @@ $(document).ready(function () {
             $('<td>').text(data.settlementId).hide(),
             $('<td>').text(data.contractorId).hide(),
             $('<td>').text(data.contractorName),
-            $('<td>').text(data.document),
+            $('<td align="center">').text(data.document),
             $('<td>').text(formatted_dateOfIssue),
             $('<td>').text(formatted_dateOfPayment),
-            $('<td>').text(data.amount),
-            $('<td>').text(data.paidAmount),
-            $('<td>').append(isChecked(data)),
-            $('<td><button class="btn btn-success" id="pay-settlement-button">zapłać</button>'),
-            $('<td><button class="btn btn-success" id="edit-settlement-button">edytuj</button>'),
-            $('<td><button class="btn btn-danger" id="delete-settlement-button">usuń</button>')
+            $('<td align="center">').text(data.amount),
+            $('<td align="center">').text(data.paidAmount),
+            $('<td align="center">').append(isChecked(data)),
+            $('<td align="center"><button class="btn btn-success" id="pay-settlement-button">zapłać</button>'),
+            $('<td align="center"><button class="btn btn-success" id="edit-settlement-button">edytuj</button>'),
+            $('<td align="center"><button class="btn btn-danger" id="delete-settlement-button">usuń</button>')
         );
         return $tr;
     }
@@ -132,9 +132,9 @@ $(document).ready(function () {
 
     function isChecked(data) {
         if (data.isPaid == true) {
-            return $('<input type="checkbox" checked disabled>')
+            return $('<i class="fas fa-check"></i>')
         } else {
-            return $('<input type="checkbox" disabled>')
+            return $('<i class="far fa-times-circle"></i>')
         }
 
     }
