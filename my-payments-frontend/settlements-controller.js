@@ -1,6 +1,7 @@
 $(document).ready(function () {
     var contractorsApi = 'https://pacific-castle-21497.herokuapp.com/api/contractors';
     var settlementsApi = 'https://pacific-castle-21497.herokuapp.com/api/settlements';
+    var paymentsApi = 'https://pacific-castle-21497.herokuapp.com/api/payments';
 
     getAllContractors();
     getAllSettlements();
@@ -27,6 +28,7 @@ $(document).ready(function () {
 
     $('[data-settlements-add-form]').on('submit', addSettlement);
     $('#edit_settlement').on("click", updateSettlement);
+    $('#pay_settlement').on("click", addPayment);
 
     function fillContractorsCombobox(contractors) {
         //$('#contractors-combobox').empty()
@@ -74,6 +76,7 @@ $(document).ready(function () {
             $('<td>').text(data.amount),
             $('<td>').text(data.paidAmount),
             $('<td>').append(isChecked(data)),
+            $('<td><button class="btn btn-success" id="pay-settlement-button">zapłać</button>'),
             $('<td><button class="btn btn-success" id="edit-settlement-button">edytuj</button>'),
             $('<td><button class="btn btn-danger" id="delete-settlement-button">usuń</button>')
         );
@@ -105,6 +108,24 @@ $(document).ready(function () {
         $("#edit-date-of-issue").val(dateOfIssue);
         $("#edit-date-of-payment").val(dateOfPayment);
         $("#edit-amount").val(amount);
+
+
+    });
+
+    $('#settlements-table-body').on("click", "#pay-settlement-button", function (event) {
+        event.preventDefault();
+        $("#paymentsModal").modal();
+        var date = new Date();
+        var formattedDate = date.getFullYear()+"-" +appendLeadingZeroes(date.getMonth() + 1) + "-" + appendLeadingZeroes(date.getDate());
+
+        var curentRow = $(this).closest('tr');
+        var id = curentRow.find('td:eq(0)').text();
+        var contractorId = curentRow.find('td:eq(1)').text();
+        var amount = curentRow.find('td:eq(6)').text();
+        $("#settlement-id").val(id);
+        $("#date-of-transfer").val(formattedDate);
+        $("#contractor-p-id").val(contractorId);
+        $("#p-amount").val(amount);
 
 
     });
@@ -143,7 +164,6 @@ $(document).ready(function () {
 
 
     function deleteSettlement(settlementId) {
-        var selectedId = $("#contractors-combobox option:selected").val();
         $.ajax({
             url: settlementsApi + '/' + settlementId,
             method: 'DELETE',
@@ -181,6 +201,33 @@ $(document).ready(function () {
                 }
             }
         });
+    }function addPayment(event) {
+        event.preventDefault();
+
+        var settlementDateOfTransfer = $("#date-of-transfer").val();
+        var settlementAmount = $("#p-amount").val();
+        var contractor= $("#contractor-p-id").val();
+        var settlement= $("#settlement-id").val();
+        var requestUrl = paymentsApi;
+        $.ajax({
+            url: requestUrl,
+            method: 'POST',
+            processData: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: JSON.stringify({
+                settlementId: settlement,
+                contractorId: contractor,
+                dateOfTransfer: settlementDateOfTransfer,
+                amount: settlementAmount
+            }),
+            complete: function (data) {
+                if (data.status === 200) {
+                    getAllSettlements();
+                    $('#paymentsModal').modal('hide');
+                }
+            }
+        });
     }
 
     function updateSettlement() {
@@ -213,6 +260,4 @@ $(document).ready(function () {
             }
         });
     }
-
-
 });
