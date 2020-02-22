@@ -114,29 +114,59 @@ $(document).ready(function () {
 
     $('#settlements-table-body').on("click", "#pay-settlement-button", function (event) {
         event.preventDefault();
-        $("#paymentsModal").modal();
         var date = new Date();
-        var formattedDate = date.getFullYear()+"-" +appendLeadingZeroes(date.getMonth() + 1) + "-" + appendLeadingZeroes(date.getDate());
+        var formattedDate = date.getFullYear() + "-" + appendLeadingZeroes(date.getMonth() + 1) + "-" + appendLeadingZeroes(date.getDate());
 
         var curentRow = $(this).closest('tr');
         var id = curentRow.find('td:eq(0)').text();
         var contractorId = curentRow.find('td:eq(1)').text();
         var amount = curentRow.find('td:eq(6)').text();
-        $("#settlement-id").val(id);
-        $("#date-of-transfer").val(formattedDate);
-        $("#contractor-p-id").val(contractorId);
-        $("#p-amount").val(amount);
+        var paidAmount = curentRow.find('td:eq(7)').text();
+
+        if (getAmountToPay(amount, paidAmount) > 0) {
+            $("#paymentsModal").modal();
+            $("#settlement-id").val(id);
+            $("#date-of-transfer").val(formattedDate);
+            $("#contractor-p-id").val(contractorId);
+            $("#p-amount").val(getAmountToPay(amount, paidAmount));
+        } else {
+            $("#settled").fadeIn();
+            closeAlert();
+        }
 
 
     });
 
+    function getAmountToPay(amount, paidAmount) {
+        var val = parseFloat(amount);
+        var val2 = parseFloat(paidAmount);
+
+        return val - val2;
+    }
+
+
+    function isAmountCorrect(amountToPay, amount, paidAmount) {
+        var val = parseFloat(amount);
+        var val2 = parseFloat(paidAmount);
+        var val3 = parseFloat(amountToPay);
+        if (val3 > amount - amountToPay) {
+            return false;
+        } else return true;
+    }
+
     function isChecked(data) {
-        if (data.isPaid == true) {
+        if (isSettlementPaid(data)) {
             return $('<i class="fas fa-check"></i>')
         } else {
             return $('<i class="far fa-times-circle"></i>')
         }
 
+    }
+
+    function isSettlementPaid(data) {
+        if (data.isPaid == true) {
+            return true;
+        } else return false;
     }
 
     function appendLeadingZeroes(n) {
@@ -201,13 +231,15 @@ $(document).ready(function () {
                 }
             }
         });
-    }function addPayment(event) {
+    }
+
+    function addPayment(event) {
         event.preventDefault();
 
         var settlementDateOfTransfer = $("#date-of-transfer").val();
         var settlementAmount = $("#p-amount").val();
-        var contractor= $("#contractor-p-id").val();
-        var settlement= $("#settlement-id").val();
+        var contractor = $("#contractor-p-id").val();
+        var settlement = $("#settlement-id").val();
         var requestUrl = paymentsApi;
         $.ajax({
             url: requestUrl,
@@ -259,5 +291,11 @@ $(document).ready(function () {
                 $('#myModal').modal('hide');
             }
         });
+    }
+
+    function closeAlert(){
+        window.setTimeout(function () {
+            $("#settled").fadeOut(300)
+        }, 3000);
     }
 });

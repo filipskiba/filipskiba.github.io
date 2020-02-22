@@ -1,31 +1,29 @@
 $(document).ready(function () {
     var apiRoot = 'https://pacific-castle-21497.herokuapp.com/api/rates';
     getRates();
+    rates=[];
 
     function getRates() {
         $.ajax({
             url: apiRoot,
             method: 'GET',
-            success: handleDatatableRender
-
+            success: function (data) {
+                    rates = data;
+            }
         });
     }
 
-    function handleDatatableRender(readerData) {
-        $('#title-table-body').empty()
-        readerData.forEach(function (reader) {
-            var $datatableRowEl = createElement(reader);
-            $datatableRowEl
-                .appendTo($('#rates-table-body'));
+     function newsRotate($i){
+        $("#newsbar").fadeOut(1000);
+        $("#newsbar").promise().done(function(){
+            $("#newsbar").html(rates[$i].currency+" "+rates[$i].mid+"zł");
+            $("#newsbar").fadeIn(1000).delay(5000);
+            if ($i < rates.length-1)
+                newsRotate($i+1);
+            else
+                newsRotate(0);
         });
-    }
 
-    function createElement(data) {
-        var $tr = $('<tr>').append(
-            $('<td>').text(data.currency),
-            $('<td>').text(data.code),
-            $('<td>').text(data.mid)
-        );
-        return $tr;
     }
+    newsRotate(0);
 });
