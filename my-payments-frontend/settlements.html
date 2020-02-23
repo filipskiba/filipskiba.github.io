@@ -59,7 +59,7 @@
                                 method="POST"
                         >
                             <div class="form-group">
-                                <select id="contractors-combobox" class="custom-select" name="Kontrahent">
+                                <select id="contractors-combobox" class="custom-select" name="Kontrahent" required>
                                     <option disabled selected>--- wybierz kontrahenta ---</option>
                                 </select>
                             </div>
@@ -67,12 +67,13 @@
                             <div class="form-group">
                                 <input class="form-control form-control-lg" name="document"
                                        placeholder="Dokument"
+                                       required
                                        type="text">
                             </div>
 
                             <div class="form-group">
                                 <div class="input-group date" data-provide="datepicker">
-                                    <input type="text" name="date-of-issue" class="form-control"
+                                    <input type="text" name="date-of-issue" class="form-control" required
                                            placeholder="Data wystawienia">
                                     <div class="input-group-addon">
                                         <span class="glyphicon glyphicon-th"></span>
@@ -82,7 +83,7 @@
 
                             <div class="form-group">
                                 <div class="input-group date" data-provide="datepicker">
-                                    <input type="text" name="date-of-payment" class="form-control"
+                                    <input type="text" name="date-of-payment" class="form-control" required
                                            placeholder="termin płatności">
                                     <div class="input-group-addon">
                                         <span class="glyphicon glyphicon-th"></span>
@@ -91,7 +92,7 @@
                             </div>
 
                             <div class="form-group">
-                                <input class="form-control form-control-lg" name="amount"
+                                <input class="form-control form-control-lg" name="amount" required
                                        placeholder="Kwota"
                                        type="number" min="0" value="0" step=".01">
 
