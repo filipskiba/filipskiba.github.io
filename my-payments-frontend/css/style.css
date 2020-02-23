@@ -6,6 +6,9 @@ body{
     border-bottom: #008ed6 3px solid;
     opacity: 0.8;
 }
+.card{
+    margin-bottom: 50px;
+}
 
 .main{
     margin-top: 50px;
