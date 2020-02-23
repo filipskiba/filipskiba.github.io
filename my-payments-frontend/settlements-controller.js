@@ -28,7 +28,7 @@ $(document).ready(function () {
 
     $('[data-settlements-add-form]').on('submit', addSettlement);
     $('#edit_settlement').on("click", updateSettlement);
-    $('#pay_settlement').on("click", addPayment);
+    $('[data-payments-add-form]').on('submit', addPayment);
 
     function fillContractorsCombobox(contractors) {
         //$('#contractors-combobox').empty()
@@ -128,7 +128,8 @@ $(document).ready(function () {
             $("#settlement-id").val(id);
             $("#date-of-transfer").val(formattedDate);
             $("#contractor-p-id").val(contractorId);
-            $("#p-amount").val(getAmountToPay(amount, paidAmount));
+            $("#p-amount").val(getAmountToPay(amount, paidAmount)).prop('max',getAmountToPay(amount,paidAmount));
+
         } else {
             $("#settled").fadeIn();
             closeAlert();
@@ -142,16 +143,6 @@ $(document).ready(function () {
         var val2 = parseFloat(paidAmount);
 
         return val - val2;
-    }
-
-
-    function isAmountCorrect(amountToPay, amount, paidAmount) {
-        var val = parseFloat(amount);
-        var val2 = parseFloat(paidAmount);
-        var val3 = parseFloat(amountToPay);
-        if (val3 > amount - amountToPay) {
-            return false;
-        } else return true;
     }
 
     function isChecked(data) {
@@ -235,7 +226,6 @@ $(document).ready(function () {
 
     function addPayment(event) {
         event.preventDefault();
-
         var settlementDateOfTransfer = $("#date-of-transfer").val();
         var settlementAmount = $("#p-amount").val();
         var contractor = $("#contractor-p-id").val();
