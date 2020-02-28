@@ -42,8 +42,61 @@
     </div>
 </nav>
 
+<div class="main">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card bg-primary text-center card-form">
+                    <div class="card-body">
+                        <h3>Sprawdź status kontrahenta</h3>
+                        <form
+                                action="https://pacific-castle-21497.herokuapp.com/api/settlements"
+                                data-status-add-form
+                                method="POST"
+                        >
+                            <div class="form-group">
+                                <select id="contractors-combobox" class="custom-select" name="Kontrahent" required>
+                                    <option disabled selected>--- wybierz kontrahenta ---</option>
+                                </select>
+                            </div>
+
+                            <input class="btn btn-outline-light btn-block" id="add_status" type="submit"
+                                   value="Sprawdź kontrahenta">
+
+                        </form>
+                        <button class="btn btn-outline-light btn-block" id="add_all_statuses" type="submit"
+                                value="">Sprawdź wszystkich</button>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="table-responsive-md table-bordered table-hover">
+                    <table class="table">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Kontrahent</th>
+                            <th scope="col">Data statusu</th>
+                            <th scope="col">Aktywny</th>
+                            <th scope="col">Usuń</th>
+
+                        </tr>
+                        </thead>
+                        <tbody id="statuses-table-body">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 <script src="jquery-3.4.1.min.js"></script>
+<script src="https://use.fontawesome.com/releases/v5.12.1/js/all.js" data-auto-replace-svg="nest"></script>
 <script src="statuses-controller.js"></script>
 
 <script crossorigin="anonymous"
