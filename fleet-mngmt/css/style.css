@@ -1,0 +1,56 @@
+body{
+    background: #333;
+    color: #fff;
+}
+.navbar{
+    border-bottom: #008ed6 3px solid;
+    opacity: 0.8;
+}
+.card{
+    margin-bottom: 50px;
+}
+
+.main{
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+.table-responsive {
+    display: table;
+}
+#snoAlertBoxTrue{
+    position:absolute;
+    z-index:1400;
+    top:2%;
+    right:4%;
+    margin:0px auto;
+    text-align:center;
+    display:none;
+}
+#settled{
+    position:absolute;
+    z-index:1400;
+    top:2%;
+    right:4%;
+    margin:0px auto;
+    text-align:center;
+    display:none;
+}
+#snoAlertBoxFalse{
+    position:absolute;
+    z-index:1400;
+    top:2%;
+    right:4%;
+    margin:0px auto;
+    text-align:center;
+    display:none;
+}#snoAlertBoxError{
+     position:absolute;
+     z-index:1400;
+     top:2%;
+     right:4%;
+     margin:0px auto;
+     text-align:center;
+     display:none;
+ }
+.big-checkbox {width: 30px; height: 30px;}
+
