@@ -38,6 +38,9 @@
                 <a class="nav-link" href="payments.html">Płatności</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="dispositions.html">Dyspozycje</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="statuses.html">Statusy kontrahentów</a>
             </li>
 
@@ -58,9 +61,28 @@
                                 data-settlements-add-form
                                 method="POST"
                         >
+
+                            <div class="form-group">
+                                <select id="owners-combobox" class="custom-select" name="właściciel" required>
+                                    <option disabled selected>--- wybierz podmiot ---</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <select id="OwnerBankAccountNumber-combobox" class="custom-select" name="konto-właściciela" required>
+                                    <option disabled selected>--- wybierz konto bankowe ---</option>
+                                </select>
+                            </div>
+
                             <div class="form-group">
                                 <select id="contractors-combobox" class="custom-select" name="Kontrahent" required>
                                     <option disabled selected>--- wybierz kontrahenta ---</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <select id="bankAccountNumber-combobox" class="custom-select" name="konto" required>
+                                    <option disabled selected>--- wybierz konto bankowe kontrahenta ---</option>
                                 </select>
                             </div>
 
@@ -99,6 +121,8 @@
                             </div>
 
 
+
+
                             <input class="btn btn-outline-light btn-block" id="add_settlement" type="submit"
                                    value="Submit">
                         </form>
@@ -118,6 +142,7 @@
                             <th scope="col">kwota</th>
                             <th scope="col">zapłacono</th>
                             <th scope="col">uregulowano</th>
+                            <th scope="col">Numer konta</th>
                             <th scope="col">Zapłać</th>
                             <th scope="col">edycja</th>
                             <th scope="col">usuń</th>
@@ -152,6 +177,18 @@
 
                         <div class="form-group">
                             <input class="form-control form-control-lg" id="edit-id"
+                                   placeholder="Id"
+                                   readonly type="hidden">
+                        </div>
+
+                        <div class="form-group">
+                            <input class="form-control form-control-lg" id="edit-owner-id"
+                                   placeholder="Id"
+                                   readonly type="hidden">
+                        </div>
+
+                        <div class="form-group">
+                            <input class="form-control form-control-lg" id="edit-owner-bankAccount"
                                    placeholder="Id"
                                    readonly type="hidden">
                         </div>
@@ -194,6 +231,14 @@
                                    type="number" min="0" value="0" step=".01">
 
                         </div>
+
+                        <div class="form-group">
+                            <select id="edit-bankAccountNumber-combobox" class="custom-select" name="konto" required>
+                                <option disabled selected>--- wybierz konto bankowe ---</option>
+                            </select>
+                        </div>
+
+
                         <button class="btn btn-outline-light btn-block" id="edit_settlement">Uaktualnij</button>
 
 
@@ -235,6 +280,23 @@
                                        placeholder="id"
                                        readonly type="hidden">
                             </div>
+                            <div class="form-group">
+                                <input class="form-control form-control-lg" id="p-owner-bankAccount"
+                                       placeholder="Id"
+                                       readonly type="hidden">
+                            </div>
+
+                            <div class="form-group">
+                                <input class="form-control form-control-lg" id="p-owner-id"
+                                       placeholder="Id"
+                                       readonly type="hidden">
+                            </div>
+
+                            <div class="form-group">
+                                <input class="form-control form-control-lg" id="p-document"
+                                       placeholder="Dokument"
+                                       type="text">
+                            </div>
 
                             <div class="form-group">
                                 <div class="input-group date" data-provide="datepicker">
@@ -250,6 +312,12 @@
                                 <input class="form-control form-control-lg" id="p-amount"
                                        placeholder="Kwota"
                                        type="number" min="0" value="0" step=".01">
+                            </div>
+
+                            <div class="form-group">
+                                <input class="form-control form-control-lg" id="p-bankAccountNumber-combobox"
+                                       placeholder="id"
+                                       readonly type="hidden">
                             </div>
                             <button class="btn btn-outline-light btn-block" type="submit" value="submit"
                                     id="pay_settlement">Zapłać

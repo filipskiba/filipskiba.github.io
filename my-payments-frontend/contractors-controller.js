@@ -1,5 +1,7 @@
 $(document).ready(function () {
-    var apiRoot = 'https://pacific-castle-21497.herokuapp.com/api/contractors';
+    var prod = 'https://pacific-castle-21497.herokuapp.com';
+  //  var test = 'http://localhost:8083';
+    var apiRoot = prod+ '/api/contractors';
 
     getAllContractors();
 
@@ -24,6 +26,10 @@ $(document).ready(function () {
             $('<td>').text(data.contractorId),
             $('<td>').text(data.contractorName),
             $('<td>').text(data.nipId),
+            $('<td>').text(data.adress),
+            $('<td>').text(data.city),
+            $('<td>').text(data.zipCode),
+            $('<td>').text(data.contractorType),
             $('<td><button class="btn btn-success" id="edit-contractor-button">edytuj</button>'),
             $('<td><button class="btn btn-danger" id="delete-contractor-button">usuń</button>')
         );
@@ -46,10 +52,18 @@ $(document).ready(function () {
         var contractorId = curentRow.find('td:eq(0)').text();
         var contractorName = curentRow.find('td:eq(1)').text();
         var contractorNip = curentRow.find('td:eq(2)').text();
+        var adress = curentRow.find('td:eq(3)').text();
+        var city = curentRow.find('td:eq(4)').text();
+        var zipCode = curentRow.find('td:eq(5)').text();
+        var contractorType = curentRow.find('td:eq(6)').text();
 
         $("#edit_id").val(contractorId);
         $("#edit_contractor_name").val(contractorName);
         $("#edit_contractor_nip").val(contractorNip);
+        $("#edit_contractor_adress").val(adress);
+        $("#edit_contractor_city").val(city);
+        $("#edit_contractor_zip-code").val(zipCode);
+        $("#edit_contractor_type").val(contractorType);
 
     });
     //*************************************TABLE***********************************************************************
@@ -82,6 +96,10 @@ $(document).ready(function () {
         event.preventDefault();
         var contractorName = $(this).find('[name="contractorName"]').val();
         var contractorNip = $(this).find('[name="nipId"]').val();
+        var contractorAdress = $(this).find('[name="adress"]').val();
+        var contractorCity = $(this).find('[name="city"]').val();
+        var contractorZipCode = $(this).find('[name="zip-code"]').val();
+        var selectedType = $("#contractor-type option:selected").val();
         console.log(contractorName)
         var requestUrl = apiRoot;
 
@@ -93,7 +111,13 @@ $(document).ready(function () {
             dataType: 'json',
             data: JSON.stringify({
                 contractorName: contractorName,
-                nipId: contractorNip
+                nipId: contractorNip,
+                adress: contractorAdress,
+                city: contractorCity,
+                zipCode: contractorZipCode,
+                contractorType: selectedType
+
+
             }),
             complete: function (data) {
                 if (data.status === 200) {
@@ -108,7 +132,10 @@ $(document).ready(function () {
         var id = $("#edit_id").val();
         var contractorName = $("#edit_contractor_name").val();
         var contractorNip = $("#edit_contractor_nip").val();
-
+        var contractorAdress = $("#edit_contractor_adress").val();
+        var contractorCity = $("#edit_contractor_city").val();
+        var contractorZipCode = $("#edit_contractor_zip-code").val();
+        var selectedType = $("#edit_contractor_type option:selected").val();
         var requestUrl = apiRoot;
 
         $.ajax({
@@ -120,7 +147,11 @@ $(document).ready(function () {
             data: JSON.stringify({
                 contractorId: id,
                 contractorName: contractorName,
-                nipId: contractorNip
+                nipId: contractorNip,
+                adress: contractorAdress,
+                city: contractorCity,
+                zipCode: contractorZipCode,
+                contractorType: selectedType
             }),
             success: function (data) {
                 getAllContractors();

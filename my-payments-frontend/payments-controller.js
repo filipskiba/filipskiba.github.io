@@ -1,5 +1,8 @@
 $(document).ready(function () {
-    var paymentsApi = 'https://pacific-castle-21497.herokuapp.com/api/payments';
+    var prod = 'https://pacific-castle-21497.herokuapp.com';
+ //   var test = 'http://localhost:8083';
+    var paymentsApi = prod+'/api/payments';
+
     getAllPayments();
     function handleDatatableRender(paymentsData) {
 
@@ -18,6 +21,7 @@ $(document).ready(function () {
             $('<td>').text(data.contractorName),
             $('<td>').text(data.dateOfTransfer),
             $('<td>').text(data.amount),
+            $('<td>').text(data.dispositionId),
             $('<td><button class="btn btn-danger" id="delete-payment-button">usuń</button>')
         );
         return $tr;

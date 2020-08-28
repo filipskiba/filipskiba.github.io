@@ -1,10 +1,14 @@
 $(document).ready(function () {
-    var contractorsApi = 'https://pacific-castle-21497.herokuapp.com/api/contractors';
-    var settlementsApi = 'https://pacific-castle-21497.herokuapp.com/api/settlements';
-    var paymentsApi = 'https://pacific-castle-21497.herokuapp.com/api/payments';
+    var prod = 'https://pacific-castle-21497.herokuapp.com';
+  //  var test = 'http://localhost:8083'
+    var contractorsApi = prod + '/api/contractors';
+    var settlementsApi = prod + '/api/settlements';
+    var paymentsApi = prod + '/api/payments';
+    var bankAccountApi = prod + '/api/bankAccounts';
 
     getAllContractors();
     getAllSettlements();
+    getAllOwners();
 
 
     $.fn.datepicker.defaults.format = "yyyy-mm-dd";
@@ -48,8 +52,108 @@ $(document).ready(function () {
         });
     }
 
+    function fillOwnersCombobox(owners) {
+        //$('#contractors-combobox').empty()
+        owners.forEach(function (owner) {
+
+            var option = $("<option />");
+
+            //Set Contractor Name in Text part.
+            option.html(owner.contractorName);
+
+            //Set Contractor contractorId in Value part.
+            option.val(owner.contractorId);
+
+            //Add the Option element to DropDownList.
+            option.appendTo($('#owners-combobox'));
+
+        });
+    }
+
+    function fillOwnerBankAccountCombobox(contractorId) {
+        $('#OwnerBankAccountNumber-combobox').empty()
+        $.ajax({
+            url: bankAccountApi + '/' + contractorId,
+            method: 'GET',
+            success: function (data) {
+                data.forEach(function (data) {
+
+                    var option = $("<option />");
+
+                    //Set Contractor Name in Text part.
+                    option.html(data.bankAccountNumber);
+
+                    //Set Contractor contractorId in Value part.
+                    option.val(data.bankAccountNumber);
+
+                    //Add the Option element to DropDownList.
+                    option.appendTo($('#OwnerBankAccountNumber-combobox'));
+
+                });
+            }
+        });
+    }
+
+    function fillBankAccountCombobox(contractorId) {
+        $('#bankAccountNumber-combobox').empty()
+        $.ajax({
+            url: bankAccountApi + '/' + contractorId,
+            method: 'GET',
+            success: function (data) {
+                data.forEach(function (data) {
+
+                    var option = $("<option />");
+
+                    //Set Contractor Name in Text part.
+                    option.html(data.bankAccountNumber);
+
+                    //Set Contractor contractorId in Value part.
+                    option.val(data.bankAccountNumber);
+
+                    //Add the Option element to DropDownList.
+                    option.appendTo($('#bankAccountNumber-combobox'));
+
+                });
+            }
+        });
+    }
+
+    function fillEditBankAccountCombobox(contractorId) {
+        $('#edit-bankAccountNumber-combobox').empty();
+
+        $.ajax({
+            url: bankAccountApi + '/' + contractorId,
+            method: 'GET',
+            success: function (data) {
+                data.forEach(function (data) {
+
+                    var option = $("<option />");
+
+                    //Set Contractor Name in Text part.
+                    option.html(data.bankAccountNumber);
+
+                    //Set Contractor contractorId in Value part.
+                    option.val(data.bankAccountNumber);
+
+                    //Add the Option element to DropDownList.
+                    option.appendTo($('#edit-bankAccountNumber-combobox'));
+
+                });
+            }
+        });
+    }
+
     $("#contractors-combobox").change(function () {
         var selectedId = $(this).children("option:selected").val();
+        fillBankAccountCombobox(selectedId);
+    });
+    $("#owners-combobox").change(function () {
+        var selectedId = $(this).children("option:selected").val();
+        fillOwnerBankAccountCombobox(selectedId);
+    });
+
+    $("#bankAccountNumber-combobox").change(function () {
+        var selectedNumber = $(this).children("option:selected").val();
     });
 
     function handleDatatableRender(settlementsData) {
@@ -76,6 +180,7 @@ $(document).ready(function () {
             $('<td align="center">').text(data.amount),
             $('<td align="center">').text(data.paidAmount),
             $('<td align="center">').append(isChecked(data)),
+            $('<td align="center">').text(data.bankAccountNumber),
             $('<td align="center"><button class="btn btn-success" id="pay-settlement-button">zapłać</button>'),
             $('<td align="center"><button class="btn btn-success" id="edit-settlement-button">edytuj</button>'),
             $('<td align="center"><button class="btn btn-danger" id="delete-settlement-button">usuń</button>')
@@ -89,46 +194,53 @@ $(document).ready(function () {
         deleteSettlement(id_col);
     });
 
+    function fillEditForm(data) {
+        $("#edit-id").val(data.settlementId);
+        $("#contractor-id").val(data.contractorId);
+        $("#edit-owner-id").val(data.ownerId);
+        $("#edit-owner-bankAccount").val(data.ownerBankAccountNumber);
+        $("#edit-document").val(data.document);
+        $("#edit-date-of-issue").val(data.dateOfIssue);
+        $("#edit-date-of-payment").val(data.dateOfPayment);
+        $("#edit-amount").val(data.amount);
+        fillEditBankAccountCombobox(data.contractorId);
+    }
+
+    function fillPaymentForm(data) {
+        var date = new Date();
+        var formattedDate = date.getFullYear() + "-" + appendLeadingZeroes(date.getMonth() + 1) + "-" + appendLeadingZeroes(date.getDate());
+        $("#settlement-id").val(data.settlementId);
+        $("#contractor-p-id").val(data.contractorId);
+        $("#p-owner-id").val(data.ownerId);
+        $("#p-owner-bankAccount").val(data.ownerBankAccountNumber);
+        $("#p-document").val(data.document);
+        $("#date-of-transfer").val(formattedDate);
+        $("#p-amount").val(getAmountToPay(data.amount, data.paidAmount));
+        $("#p-bankAccountNumber-combobox").val(data.bankAccountNumber);
+
+
+    }
+
     $('#settlements-table-body').on("click", "#edit-settlement-button", function (event) {
         event.preventDefault();
         $("#myModal").modal();
-
-        var curentRow = $(this).closest('tr');
-        var id = curentRow.find('td:eq(0)').text();
-        var contractorId = curentRow.find('td:eq(1)').text();
-        var document = curentRow.find('td:eq(3)').text();
-        var dateOfIssue = curentRow.find('td:eq(4)').text();
-        var dateOfPayment = curentRow.find('td:eq(5)').text();
-        var amount = curentRow.find('td:eq(6)').text();
-
-
-        $("#edit-id").val(id);
-        $("#contractor-id").val(contractorId);
-        $("#edit-document").val(document);
-        $("#edit-date-of-issue").val(dateOfIssue);
-        $("#edit-date-of-payment").val(dateOfPayment);
-        $("#edit-amount").val(amount);
-
-
+        var currentRow = $(this).closest('tr');
+        var id = currentRow.find('td:eq(0)').text();
+        getSettlementForEdit(id);
     });
 
     $('#settlements-table-body').on("click", "#pay-settlement-button", function (event) {
         event.preventDefault();
-        var date = new Date();
-        var formattedDate = date.getFullYear() + "-" + appendLeadingZeroes(date.getMonth() + 1) + "-" + appendLeadingZeroes(date.getDate());
 
         var curentRow = $(this).closest('tr');
         var id = curentRow.find('td:eq(0)').text();
-        var contractorId = curentRow.find('td:eq(1)').text();
-        var amount = curentRow.find('td:eq(6)').text();
         var paidAmount = curentRow.find('td:eq(7)').text();
+        var amount = curentRow.find('td:eq(6)').text();
+
 
         if (getAmountToPay(amount, paidAmount) > 0) {
             $("#paymentsModal").modal();
-            $("#settlement-id").val(id);
-            $("#date-of-transfer").val(formattedDate);
-            $("#contractor-p-id").val(contractorId);
-            $("#p-amount").val(getAmountToPay(amount, paidAmount)).prop('max',getAmountToPay(amount,paidAmount));
+            getSettlementForPayment(id)
 
         } else {
             $("#settled").fadeIn();
@@ -141,7 +253,6 @@ $(document).ready(function () {
     function getAmountToPay(amount, paidAmount) {
         var val = parseFloat(amount);
         var val2 = parseFloat(paidAmount);
-
         return val - val2;
     }
 
@@ -175,6 +286,35 @@ $(document).ready(function () {
         });
     }
 
+    function getAllOwners() {
+        $.ajax({
+            url: contractorsApi + '/owners',
+            method: 'GET',
+            success: fillOwnersCombobox
+        });
+    }
+
+    function getSettlementForEdit(id) {
+        $.ajax({
+            url: settlementsApi + '/' + id,
+            method: 'GET',
+            success: function (data) {
+                fillEditForm(data);
+            }
+        });
+    }
+
+    function getSettlementForPayment(id) {
+        $.ajax({
+            url: settlementsApi + '/' + id,
+            method: 'GET',
+            success: function (data) {
+                fillPaymentForm(data);
+            }
+        });
+    }
+
+
     function getAllSettlements() {
         $.ajax({
             url: settlementsApi,
@@ -202,7 +342,11 @@ $(document).ready(function () {
         var settlementDateOfPayment = $(this).find('[name="date-of-payment"]').val();
         var settlementAmount = $(this).find('[name="amount"]').val();
         var selectedId = $("#contractors-combobox option:selected").val();
+        var selectedBankAccount = $("#bankAccountNumber-combobox option:selected").val();
+        var selectedOwner = $("#owners-combobox option:selected").val();
+        var selectedOwnerBankAccount = $("#OwnerBankAccountNumber-combobox option:selected").val();
         var requestUrl = settlementsApi;
+
         $.ajax({
             url: requestUrl,
             method: 'POST',
@@ -210,11 +354,14 @@ $(document).ready(function () {
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
             data: JSON.stringify({
+                ownerId: selectedOwner,
+                ownerBankAccountNumber: selectedOwnerBankAccount,
                 contractorId: selectedId,
                 document: settlementDocument,
                 dateOfIssue: settlementDateOfIssue,
                 dateOfPayment: settlementDateOfPayment,
-                amount: settlementAmount
+                amount: settlementAmount,
+                bankAccountNumber: selectedBankAccount
             }),
             complete: function (data) {
                 if (data.status === 200) {
@@ -230,7 +377,12 @@ $(document).ready(function () {
         var settlementAmount = $("#p-amount").val();
         var contractor = $("#contractor-p-id").val();
         var settlement = $("#settlement-id").val();
+        var document = $("#p-document").val();
+        var selectedBankAccount = $("#p-bankAccountNumber-combobox").val();
+        var selectedOwner = $("#p-owner-id").val();
+        var selectedOwnerBankAccount = $("#p-owner-bankAccount").val();
         var requestUrl = paymentsApi;
+
         $.ajax({
             url: requestUrl,
             method: 'POST',
@@ -238,10 +390,15 @@ $(document).ready(function () {
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
             data: JSON.stringify({
+
                 settlementId: settlement,
                 contractorId: contractor,
                 dateOfTransfer: settlementDateOfTransfer,
-                amount: settlementAmount
+                amount: settlementAmount,
+                bankAccountNumber: selectedBankAccount,
+                ownerId: selectedOwner,
+                document: document,
+                ownerBankAccountNumber: selectedOwnerBankAccount
             }),
             complete: function (data) {
                 if (data.status === 200) {
@@ -250,6 +407,7 @@ $(document).ready(function () {
                 }
             }
         });
+
     }
 
     function updateSettlement() {
@@ -260,6 +418,9 @@ $(document).ready(function () {
         var settlementDateOfIssue = $("#edit-date-of-issue").val();
         var settlementDateOfPayment = $("#edit-date-of-payment").val();
         var settlementAmount = $("#edit-amount").val();
+        var selectedBankAccount = $("#edit-bankAccountNumber-combobox option:selected").val();
+        var selectedOwner = $("#edit-owner-id").val();
+        var selectedOwnerBankAccount = $("#edit-owner-bankAccount").val();
         var requestUrl = settlementsApi;
         $.ajax({
             url: requestUrl,
@@ -270,10 +431,13 @@ $(document).ready(function () {
             data: JSON.stringify({
                 settlementId: id,
                 contractorId: contractorId,
+                ownerId: selectedOwner,
+                ownerBankAccountNumber: selectedOwnerBankAccount,
                 document: settlementDocument,
                 dateOfIssue: settlementDateOfIssue,
                 dateOfPayment: settlementDateOfPayment,
-                amount: settlementAmount
+                amount: settlementAmount,
+                bankAccountNumber: selectedBankAccount
 
             }),
             success: function (data) {
@@ -283,7 +447,13 @@ $(document).ready(function () {
         });
     }
 
-    function closeAlert(){
+    function closeAlert() {
+        window.setTimeout(function () {
+            $("#settled").fadeOut(300)
+        }, 3000);
+    }
+
+    function closeAlertAmountTooHigh() {
         window.setTimeout(function () {
             $("#settled").fadeOut(300)
         }, 3000);
