@@ -7,7 +7,7 @@ $(document).ready(function () {
 
     function handleDatatableRender(dispositions) {
 
-        $('#payments-table-body').empty()
+        $('#dispositions-table-body').empty()
         dispositions.forEach(function (disposition) {
             var $datatableRowEl = createElement(disposition);
             $datatableRowEl
@@ -19,9 +19,15 @@ $(document).ready(function () {
         sendCheckedDispositions();
     });
 
+    $('#dispositions-table-body').on("click", "#delete-disposition-button", function (event) {
+        var curentRow = $(this).closest('tr');
+        var id_col = curentRow.find('td:eq(0)').text();
+        deleteDisposition(id_col);
+    });
+
     function download(filename, text) {
         var element = document.createElement('a');
-        element.setAttribute('href', 'data:text/plain;charset=windows-1250,' + encodeURIComponent(text));
+        element.setAttribute('href', 'data:text/plain;charset=CP1250,' + encodeURIComponent(text));
         element.setAttribute('download', filename);
 
         element.style.display = 'none';
@@ -58,10 +64,9 @@ $(document).ready(function () {
             success: function (data) {
                 download("dispositions.txt", data)
             }
-        });
 
-        //Display selected Row data in Alert Box.
-        // alert(message);
+        });
+        getAllDispositions();
     }
 
 
@@ -74,7 +79,7 @@ $(document).ready(function () {
             $('<td>').text(data.amount),
             $('<td align="center">').append(isChecked(data)),
             $('<td align="center"><input type="checkbox">'),
-            $('<td><button class="btn btn-danger" id="delete-payment-button">usuń</button>')
+            $('<td><button class="btn btn-danger" id="delete-dispositon-button">usuń</button>')
         );
         return $tr;
     }
@@ -100,5 +105,16 @@ $(document).ready(function () {
         if (data.isExecuted == true) {
             return true;
         } else return false;
+    }
+
+    function deleteDisposition(dispositionId) {
+        $.ajax({
+            url: dispositionsApi + '/' + dispositionId,
+            method: 'DELETE',
+            success: function () {
+                $('#rows').empty()
+                getAllDispositions()
+            }
+        })
     }
 });
