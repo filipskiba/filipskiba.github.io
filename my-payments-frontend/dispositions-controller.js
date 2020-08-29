@@ -19,7 +19,7 @@ $(document).ready(function () {
         sendCheckedDispositions();
     });
 
-    $('#dispositions-table-body').on("click", "#delete-disposition-button", function (event) {
+    $('#dispositions-table-body').on("click", "#delete-dispositon-button", function (event) {
         var curentRow = $(this).closest('tr');
         var id_col = curentRow.find('td:eq(0)').text();
         deleteDisposition(id_col);
