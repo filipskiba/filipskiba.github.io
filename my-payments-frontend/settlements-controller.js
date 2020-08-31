@@ -1,6 +1,6 @@
 $(document).ready(function () {
     var prod = 'https://pacific-castle-21497.herokuapp.com';
-  //  var test = 'http://localhost:8083'
+    //  var test = 'http://localhost:8083'
     var contractorsApi = prod + '/api/contractors';
     var settlementsApi = prod + '/api/settlements';
     var paymentsApi = prod + '/api/payments';
@@ -152,10 +152,6 @@ $(document).ready(function () {
         fillOwnerBankAccountCombobox(selectedId);
     });
 
-    $("#bankAccountNumber-combobox").change(function () {
-        var selectedNumber = $(this).children("option:selected").val();
-    });
-
     function handleDatatableRender(settlementsData) {
         $('#settlements-table-body').empty()
         settlementsData.forEach(function (settlement) {
@@ -282,7 +278,10 @@ $(document).ready(function () {
         $.ajax({
             url: contractorsApi,
             method: 'GET',
-            success: fillContractorsCombobox
+            success: fillContractorsCombobox,
+            error: function () {
+                alert('Nie udało się pobrać kontrahentów!')
+            }
         });
     }
 
@@ -290,7 +289,10 @@ $(document).ready(function () {
         $.ajax({
             url: contractorsApi + '/owners',
             method: 'GET',
-            success: fillOwnersCombobox
+            success: fillOwnersCombobox,
+            error: function () {
+                alert('Nie udało się pobrać listy właścicieli!')
+            }
         });
     }
 
@@ -300,6 +302,9 @@ $(document).ready(function () {
             method: 'GET',
             success: function (data) {
                 fillEditForm(data);
+            },
+            error: function () {
+                alert('Nie udało się pobrać danych rozrachunku!')
             }
         });
     }
@@ -310,6 +315,9 @@ $(document).ready(function () {
             method: 'GET',
             success: function (data) {
                 fillPaymentForm(data);
+            },
+            error: function () {
+                alert('Nie udało się pobrać danych rozrachunku!')
             }
         });
     }
@@ -319,7 +327,10 @@ $(document).ready(function () {
         $.ajax({
             url: settlementsApi,
             method: 'GET',
-            success: handleDatatableRender
+            success: handleDatatableRender,
+            error: function () {
+                alert('Nie udało się pobrać listy rozrachunków!')
+            }
         });
     }
 
@@ -331,6 +342,9 @@ $(document).ready(function () {
             success: function () {
                 $('#rows').empty()
                 getAllSettlements()
+            },
+            error: function () {
+                alert('Nie udało się usunąć  rozrachunku!')
             }
         })
     }
@@ -366,6 +380,8 @@ $(document).ready(function () {
             complete: function (data) {
                 if (data.status === 200) {
                     getAllSettlements();
+                } else {
+                    alert('Nie udało się dodać rozrachunku!')
                 }
             }
         });
@@ -404,6 +420,9 @@ $(document).ready(function () {
                 if (data.status === 200) {
                     getAllSettlements();
                     $('#paymentsModal').modal('hide');
+                } else {
+
+                    alert('Nie udało się dokonać płatności!')
                 }
             }
         });
@@ -443,6 +462,9 @@ $(document).ready(function () {
             success: function (data) {
                 getAllSettlements();
                 $('#myModal').modal('hide');
+            },
+            error: function () {
+                alert('Nie udało się uaktualnić rozrachunku!')
             }
         });
     }
@@ -453,9 +475,4 @@ $(document).ready(function () {
         }, 3000);
     }
 
-    function closeAlertAmountTooHigh() {
-        window.setTimeout(function () {
-            $("#settled").fadeOut(300)
-        }, 3000);
-    }
 });

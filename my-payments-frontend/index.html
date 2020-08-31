@@ -46,10 +46,32 @@
     </div>
 </nav>
 
-<section id="kontener" style="width: 300px; font-size: 13pt;">
+<section id="kontener" style="width: 300px; font-size: 13pt; float: right">
     <h3>Aktualne kursy walut:</h3>
     <span id="newsbar"></span>
 </section>
+<h1>Moje płatności</h1>
+<br>
+<p><h2>Aplikacja "Moje-płatności" została zaprojektowana w celu zarządzania rozrachunkami.</h2> <br>
+Strona składa się z następujących modułów:
+</p>
+<br>
+<ul>
+    <li>Strona główna - instrukcja obsługi, aktualne kursy walut</li>
+    <li>Kontrahenci - moduł umożliwiający dodawanie, edycję oraz usuwanie kontrahentów oraz kont właścicieli</li>
+    <li>Konta bankowe - moduł umożliwiający dodawanie, edycję oraz usuwanie kont bankowych wybranych kontrahentów</li>
+    <li>Rozrachunki- moduł umożliwiający dodawanie, edycję, usuwanie oraz opłacenie wybranych rozrachunków</li>
+    <li>Płatności- moduł informujący o dokonanych płatnościach</li>
+    <li>Dyspozycje- moduł umożliwiający zarządzanie oraz eksportowanie dyspozycji bankowych do pliku (plik ten można importować w bankowości internetowej) </li>
+    <li>Statusy kontrahentów- moduł umożliwiający sprawdzenie na podstawie numeru nip oraz konta bankowego status kontrahenta w portalu Ministerstwa Finansów</li>
+</ul>
+<br>
+<p>Aplikacja korzysta z następujących API zewnętrznych: </p>
+<br>
+<ul>
+    <li>http://api.nbp.pl/api</li>
+    <li>https://wl-api.mf.gov.pl/api</li>
+</ul>
 
 
 <script src="jquery-3.4.1.min.js"></script>
@@ -61,8 +83,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
         integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
         crossorigin="anonymous"></script>
-
-
 
 
 </body>

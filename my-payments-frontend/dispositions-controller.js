@@ -1,6 +1,5 @@
 $(document).ready(function () {
     var prod = 'https://pacific-castle-21497.herokuapp.com';
-  //  var test = 'http://localhost:8083';
     var dispositionsApi = prod + '/api/dispositions';
 
     getAllDispositions();
@@ -27,7 +26,7 @@ $(document).ready(function () {
 
     function download(filename, text) {
         var element = document.createElement('a');
-        element.setAttribute('href', 'data:text/plain;charset=CP1250,' + encodeURIComponent(text));
+        element.setAttribute('href', 'data:text/plain;charset=Windows-1250,' + encodeURIComponent(text));
         element.setAttribute('download', filename);
 
         element.style.display = 'none';
@@ -63,6 +62,9 @@ $(document).ready(function () {
             method: 'GET',
             success: function (data) {
                 download("dispositions.txt", data)
+            },
+            error: function () {
+                alert('Nie można utworzyć pliku z dyspozycjami!')
             }
 
         });
@@ -88,7 +90,10 @@ $(document).ready(function () {
         $.ajax({
             url: dispositionsApi,
             method: 'GET',
-            success: handleDatatableRender
+            success: handleDatatableRender,
+            error: function () {
+                alert('Nie można pobrać dyspozycji');
+            }
         });
     }
 
@@ -114,6 +119,9 @@ $(document).ready(function () {
             success: function () {
                 $('#rows').empty()
                 getAllDispositions()
+            },
+            error: function () {
+                alert('Nie można usunąć dyspozycji!')
             }
         })
     }

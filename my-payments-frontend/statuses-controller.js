@@ -4,7 +4,8 @@ $(document).ready(function () {
     getAllContractors();
     getAllStatuses();
 
-    $('[data-status-add-form]').on('submit', createStatusForContractor);
+//    $('[data-status-add-form]').on('submit', createStatusForContractor);
+    $("#add_status").on('click', createStatusForContractor);
     $("#add_all_statuses").on('click', createStatusForAllContractors);
 
     function fillContractorsCombobox(contractors) {
@@ -24,10 +25,6 @@ $(document).ready(function () {
 
         });
     }
-
-    $("#contractors-combobox").change(function () {
-        var selectedId = $(this).children("option:selected").val();
-    });
 
     function handleDatatableRender(settlementsData) {
         $('#statuses-table-body').empty()
@@ -77,7 +74,7 @@ $(document).ready(function () {
         event.preventDefault();
 
         var selectedId = $("#contractors-combobox option:selected").val();
-        var requestUrl = statusesApi+"/"+selectedId;
+        var requestUrl = statusesApi + "/" + selectedId;
         $.ajax({
             url: requestUrl,
             method: 'POST',
@@ -87,23 +84,26 @@ $(document).ready(function () {
             data: JSON.stringify({
                 contractorId: selectedId,
             }),
-            complete: function (data) {
-                if (data.status === 200) {
-                    getAllStatuses();
-                }
-                else {
-                    console.log('Bad nip or id '+ data.status)
-                }
+            success: function () {
+                getAllStatuses();
+            },
+            error: function () {
+                alert('Bad nip or id ' + data.status)
             }
+
         });
     }
+
     function createStatusForAllContractors() {
         $.ajax({
-            url: statusesApi+"/"+"all",
+            url: statusesApi + "/" + "all",
             method: 'GET',
             success: function () {
                 $('#rows').empty()
                 getAllStatuses()
+            },
+            error: function () {
+                alert('Nie udało się utworzyć statusów!')
             }
         });
     }
@@ -115,6 +115,9 @@ $(document).ready(function () {
             success: function () {
                 $('#rows').empty()
                 getAllStatuses()
+            },
+            error: function () {
+                alert('Nie udało usunąć statusu!')
             }
         })
     }
@@ -123,7 +126,10 @@ $(document).ready(function () {
         $.ajax({
             url: contractorsApi,
             method: 'GET',
-            success: fillContractorsCombobox
+            success: fillContractorsCombobox,
+            error: function () {
+                alert('Nie udało się pobrać kotnrahentów!')
+            }
         });
     }
 
@@ -131,7 +137,10 @@ $(document).ready(function () {
         $.ajax({
             url: statusesApi,
             method: 'GET',
-            success: handleDatatableRender
+            success: handleDatatableRender,
+            error: function () {
+                alert('Nie udało się pobrać statusów!')
+            }
         });
     }
 });

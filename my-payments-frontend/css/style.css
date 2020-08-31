@@ -113,4 +113,7 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+.button{
+    margin-bottom: 15px;
+}
 

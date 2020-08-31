@@ -9,21 +9,24 @@ $(document).ready(function () {
             method: 'GET',
             success: function (data) {
                 rates = data;
-                newsRotate(0);
+                ratesRotate(0);
+            },
+            error: function () {
+                alert('Nie udało się pobrać aktualnych kursów walut.')
             }
         });
     }
 
-    function newsRotate(i) {
+    function ratesRotate(i) {
 
         $("#newsbar").fadeOut(1000);
         $("#newsbar").promise().done(function () {
             $("#newsbar").html(rates[i].currency + " " + rates[i].mid + "zł");
             $("#newsbar").fadeIn(1000).delay(5000);
             if (i < rates.length - 1)
-                newsRotate(i + 1);
+                ratesRotate(i + 1);
             else
-                newsRotate(0);
+                ratesRotate(0);
         });
 
     }

@@ -1,6 +1,5 @@
 $(document).ready(function () {
     var prod = 'https://pacific-castle-21497.herokuapp.com';
- //   var test = 'http://localhost:8083';
     var paymentsApi = prod+'/api/payments';
 
     getAllPayments();
@@ -37,7 +36,10 @@ $(document).ready(function () {
         $.ajax({
             url: paymentsApi,
             method: 'GET',
-            success: handleDatatableRender
+            success: handleDatatableRender,
+            error: function () {
+                alert('Nie udało się pobrać płatności!')
+            }
         });
     }
 
@@ -48,6 +50,9 @@ $(document).ready(function () {
             success: function () {
                 $('#rows').empty()
                 getAllPayments()
+            },
+            error: function () {
+                alert('Nie udało się usunąć płatności!')
             }
         })
     }
