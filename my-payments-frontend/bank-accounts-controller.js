@@ -138,6 +138,9 @@ $(document).ready(function () {
                 getBankAccountsByContractorId(selectedId)
                 getContractorStatus(selectedId)
                 // parentEl.slideUp(400, function() { parentEl.remove(); });
+            },
+            error: function (){
+                alert('Nie udało się usunąć konta bankowego!')
             }
         })
     }
@@ -161,6 +164,9 @@ $(document).ready(function () {
                 if (data.status === 200) {
                     getBankAccountsByContractorId(selectedId);
                     getContractorStatus(selectedId)
+                }
+                else{
+                    alert('Nie udalo się zapisać konta bankowego.')
                 }
             }
         });
@@ -189,6 +195,9 @@ $(document).ready(function () {
                 getBankAccountsByContractorId(selectedId)
                 getContractorStatus(selectedId)
                 $('#myModal').modal('hide');
+            },
+            error: function (){
+                alert('Nie udało się uaktualnić konta bankowego!')
             }
         });
     }

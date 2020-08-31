@@ -1,6 +1,5 @@
 $(document).ready(function () {
     var prod = 'https://pacific-castle-21497.herokuapp.com';
-  //  var test = 'http://localhost:8083';
     var apiRoot = prod+ '/api/contractors';
 
     getAllContractors();
@@ -23,10 +22,10 @@ $(document).ready(function () {
     function createElement(data) {
 
         var $tr = $('<tr>').append(
-            $('<td>').text(data.contractorId),
+            $('<td>').text(data.contractorId).hide(),
             $('<td>').text(data.contractorName),
             $('<td>').text(data.nipId),
-            $('<td>').text(data.adress),
+            $('<td>').text(data.address),
             $('<td>').text(data.city),
             $('<td>').text(data.zipCode),
             $('<td>').text(data.contractorType),
@@ -52,7 +51,7 @@ $(document).ready(function () {
         var contractorId = curentRow.find('td:eq(0)').text();
         var contractorName = curentRow.find('td:eq(1)').text();
         var contractorNip = curentRow.find('td:eq(2)').text();
-        var adress = curentRow.find('td:eq(3)').text();
+        var address = curentRow.find('td:eq(3)').text();
         var city = curentRow.find('td:eq(4)').text();
         var zipCode = curentRow.find('td:eq(5)').text();
         var contractorType = curentRow.find('td:eq(6)').text();
@@ -60,7 +59,7 @@ $(document).ready(function () {
         $("#edit_id").val(contractorId);
         $("#edit_contractor_name").val(contractorName);
         $("#edit_contractor_nip").val(contractorNip);
-        $("#edit_contractor_adress").val(adress);
+        $("#edit_contractor_address").val(address);
         $("#edit_contractor_city").val(city);
         $("#edit_contractor_zip-code").val(zipCode);
         $("#edit_contractor_type").val(contractorType);
@@ -74,7 +73,10 @@ $(document).ready(function () {
         $.ajax({
             url: apiRoot,
             method: 'GET',
-            success: handleDatatableRender
+            success: handleDatatableRender,
+            error: function (){
+                alert('Nie można pobrać kontrahentów!')
+            }
 
         });
     }
@@ -88,6 +90,9 @@ $(document).ready(function () {
                 $('#rows').empty()
                 getAllContractors();
                 // parentEl.slideUp(400, function() { parentEl.remove(); });
+            },
+            error: function () {
+                alert('Nie udało się usunąć kontrahenta!');
             }
         })
     }
@@ -96,7 +101,7 @@ $(document).ready(function () {
         event.preventDefault();
         var contractorName = $(this).find('[name="contractorName"]').val();
         var contractorNip = $(this).find('[name="nipId"]').val();
-        var contractorAdress = $(this).find('[name="adress"]').val();
+        var contractorAddress = $(this).find('[name="address"]').val();
         var contractorCity = $(this).find('[name="city"]').val();
         var contractorZipCode = $(this).find('[name="zip-code"]').val();
         var selectedType = $("#contractor-type option:selected").val();
@@ -112,17 +117,20 @@ $(document).ready(function () {
             data: JSON.stringify({
                 contractorName: contractorName,
                 nipId: contractorNip,
-                adress: contractorAdress,
+                address: contractorAddress,
                 city: contractorCity,
                 zipCode: contractorZipCode,
                 contractorType: selectedType
 
 
             }),
-            complete: function (data) {
+            success: function (data) {
                 if (data.status === 200) {
                     getAllContractors();
                 }
+            },
+            error: function (){
+                alert('Nie udało się zapisać kontrahenta!')
             }
         });
     }
@@ -132,7 +140,7 @@ $(document).ready(function () {
         var id = $("#edit_id").val();
         var contractorName = $("#edit_contractor_name").val();
         var contractorNip = $("#edit_contractor_nip").val();
-        var contractorAdress = $("#edit_contractor_adress").val();
+        var contractorAddress = $("#edit_contractor_address").val();
         var contractorCity = $("#edit_contractor_city").val();
         var contractorZipCode = $("#edit_contractor_zip-code").val();
         var selectedType = $("#edit_contractor_type option:selected").val();
@@ -148,7 +156,7 @@ $(document).ready(function () {
                 contractorId: id,
                 contractorName: contractorName,
                 nipId: contractorNip,
-                adress: contractorAdress,
+                address: contractorAddress,
                 city: contractorCity,
                 zipCode: contractorZipCode,
                 contractorType: selectedType
@@ -156,6 +164,9 @@ $(document).ready(function () {
             success: function (data) {
                 getAllContractors();
                 $('#myModal').modal('hide');
+            },
+            error: function (){
+                alert('Nie udało się uaktualnić kontrahenta!')
             }
         });
     }
