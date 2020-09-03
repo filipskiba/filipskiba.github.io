@@ -1,5 +1,7 @@
 body {
-  margin-top: 105px; }
+  margin-top: 105px;
+
+}
 
 .navbar {
   box-shadow: 2px 2px 5px #3292a6;
@@ -36,6 +38,7 @@ S
 #skills .fab {
   color: #fff; }
 
+
 @media (max-width: 768px) {
   #showcase {
     min-height: 500px; }
@@ -44,3 +47,4 @@ S
 
   .mb-resp {
     margin-bottom: 1rem; } }
+
