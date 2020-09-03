@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var rates = ['MagBud','FilBud','FilMagBud'];
+    var rates = [];
     newsRotate(0);
 
 
