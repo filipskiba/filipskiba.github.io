@@ -421,7 +421,6 @@ $(document).ready(function () {
                     getAllSettlements();
                     $('#paymentsModal').modal('hide');
                 } else {
-
                     alert('Nie udało się dokonać płatności!')
                 }
             }

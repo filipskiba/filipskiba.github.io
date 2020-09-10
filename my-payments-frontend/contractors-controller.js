@@ -1,6 +1,6 @@
 $(document).ready(function () {
     var prod = 'https://pacific-castle-21497.herokuapp.com';
-    var apiRoot = prod+ '/api/contractors';
+    var apiRoot = prod + '/api/contractors';
 
     getAllContractors();
 
@@ -74,7 +74,7 @@ $(document).ready(function () {
             url: apiRoot,
             method: 'GET',
             success: handleDatatableRender,
-            error: function (){
+            error: function () {
                 alert('Nie można pobrać kontrahentów!')
             }
 
@@ -124,13 +124,12 @@ $(document).ready(function () {
 
 
             }),
-            success: function (data) {
+            complete: function (data) {
                 if (data.status === 200) {
                     getAllContractors();
+                } else {
+                    alert('Nie udało się zapisać kontrahenta!')
                 }
-            },
-            error: function (){
-                alert('Nie udało się zapisać kontrahenta!')
             }
         });
     }
@@ -165,7 +164,7 @@ $(document).ready(function () {
                 getAllContractors();
                 $('#myModal').modal('hide');
             },
-            error: function (){
+            error: function () {
                 alert('Nie udało się uaktualnić kontrahenta!')
             }
         });
