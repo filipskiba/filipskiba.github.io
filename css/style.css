@@ -37,6 +37,9 @@ S
   color: #fff; }
 #skills .fab {
   color: #fff; }
+.item{
+  text-align: left;
+}
 
 
 @media (max-width: 768px) {
