@@ -41,6 +41,7 @@ S
   text-align: left;
 }
 .responsive {
+  max-width: 450px;
   width: 100%;
   height: auto;
 }
