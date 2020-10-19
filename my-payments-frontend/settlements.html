@@ -55,12 +55,18 @@
                 <div class="card bg-primary text-center card-form">
                     <div class="card-body">
                         <h3>Dodaj rozrachunek</h3>
-                        <p>Wypełnij ten formularz aby dodać rozrachunek</p>
+                        <p>Rodzaj rozrachunku</p>
                         <form
                                 action="https://pacific-castle-21497.herokuapp.com/api/settlements"
                                 data-settlements-add-form
                                 method="POST"
                         >
+                            <div class="form-group">
+                                <select id="settlement-type" class="custom-select" name="settlement-t" required>
+                                    <option value="STANDARD_TRANSFER">Standardowy</option>
+                                    <option value="SPLIT_PAYMENT_TRANSFER">Split payment</option>
+                                </select>
+                            </div>
 
                             <div class="form-group">
                                 <select id="owners-combobox" class="custom-select" name="właściciel" required>
@@ -121,6 +127,12 @@
 
                             </div>
 
+                            <div class="form-group">
+                                <input class="form-control form-control-lg" id="vat_amount" required
+                                       placeholder="Vat"
+                                       type="number" min="0" value="0" step=".01">
+
+                            </div>
 
                             <input class="btn btn-outline-light btn-block" id="add_settlement" type="submit"
                                    value="Zapisz">
@@ -131,18 +143,18 @@
 
             <div class="col-md-8">
                 <div class="table-responsive-md table-bordered table-hover">
-                    <table class="table">
+                    <table class="table" id="settlements-table">
                         <thead class="thead-light">
                         <tr>
+                            <th scope="col"> </th>
                             <th scope="col">Kontrahent</th>
                             <th scope="col">Dokument</th>
                             <th scope="col">Data wyst.</th>
                             <th scope="col">Data płat.</th>
                             <th scope="col">kwota</th>
                             <th scope="col">zapłacono</th>
+                            <th scope="col">dyspozycja</th>
                             <th scope="col">uregulowano</th>
-                            <th scope="col">Numer konta</th>
-                            <th scope="col">Zapłać</th>
                             <th scope="col">edycja</th>
                             <th scope="col">usuń</th>
 
@@ -152,7 +164,9 @@
 
                         </tbody>
                     </table>
+                    <button class="btn btn-success" id="open-dispositions-modal">Utwórz dyspozycje</button>
                 </div>
+
             </div>
 
         </div>
@@ -175,6 +189,7 @@
                         <h3>Edytuj rozrachunek </h3>
 
                         <div class="form-group">
+
                             <input class="form-control form-control-lg" id="edit-id"
                                    placeholder="Id"
                                    readonly type="hidden">
@@ -183,6 +198,11 @@
                         <div class="form-group">
                             <input class="form-control form-control-lg" id="edit-owner-id"
                                    placeholder="Id"
+                                   readonly type="hidden">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control form-control-lg" id="edit-settlement-type"
+                                   placeholder="settlement-type"
                                    readonly type="hidden">
                         </div>
 
@@ -230,6 +250,12 @@
                                    type="number" min="0" value="0" step=".01">
 
                         </div>
+                        <div class="form-group">
+                            <input class="form-control form-control-lg" id="edit-vat-amount"
+                                   placeholder="kwota vat"
+                                   type="number" min="0" value="0" step=".01">
+
+                        </div>
 
                         <div class="form-group">
                             <select id="edit-bankAccountNumber-combobox" class="custom-select" name="konto" required>
@@ -252,7 +278,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="paymentsModal" role="dialog">
+<div class="modal fade" id="create-dispositions-modal" role="dialog">
     <div class="modal-dialog">
 
         <!-- Modal content-->
@@ -263,40 +289,11 @@
             <div class="modal-body">
                 <div class="card bg-primary text-center card-form">
                     <div class="card-body">
-                        <h3>Zapłać </h3>
+                        <h3>Utwórz dyspozycje </h3>
                         <form
-                                action="https://pacific-castle-21497.herokuapp.com/api/payments"
-                                data-payments-add-form
+                                data-dispositions-add-form
                                 method="POST"
                         >
-                            <div class="form-group">
-                                <input class="form-control form-control-lg" id="settlement-id"
-                                       placeholder="id"
-                                       readonly type="hidden">
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control form-control-lg" id="contractor-p-id"
-                                       placeholder="id"
-                                       readonly type="hidden">
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control form-control-lg" id="p-owner-bankAccount"
-                                       placeholder="Id"
-                                       readonly type="hidden">
-                            </div>
-
-                            <div class="form-group">
-                                <input class="form-control form-control-lg" id="p-owner-id"
-                                       placeholder="Id"
-                                       readonly type="hidden">
-                            </div>
-
-                            <div class="form-group">
-                                <input class="form-control form-control-lg" id="p-document"
-                                       placeholder="Dokument"
-                                       type="text">
-                            </div>
-
                             <div class="form-group">
                                 <div class="input-group date" data-provide="datepicker">
                                     <input type="text" class="form-control" id="date-of-transfer"
@@ -306,20 +303,8 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="form-group">
-                                <input class="form-control form-control-lg" id="p-amount"
-                                       placeholder="Kwota"
-                                       type="number" min="0" value="0" step=".01">
-                            </div>
-
-                            <div class="form-group">
-                                <input class="form-control form-control-lg" id="p-bankAccountNumber-combobox"
-                                       placeholder="id"
-                                       readonly type="hidden">
-                            </div>
                             <button class="btn btn-outline-light btn-block" type="submit" value="submit"
-                                    id="pay_settlement">Zapłać
+                                    id="create-dispositions-button">Utwórz dyspozycje
                             </button>
                         </form>
 
@@ -341,6 +326,7 @@
 
 <script src='lib/dist/js/bootstrap-datepicker.min.js' type='text/javascript'></script>
 <script src="settlements-controller.js"></script>
+<script src="conf.js"></script>
 
 <script crossorigin="anonymous"
         integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"

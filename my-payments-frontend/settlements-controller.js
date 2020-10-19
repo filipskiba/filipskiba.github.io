@@ -1,14 +1,15 @@
 $(document).ready(function () {
-    var prod = 'https://pacific-castle-21497.herokuapp.com';
-    //  var test = 'http://localhost:8083'
-    var contractorsApi = prod + '/api/contractors';
-    var settlementsApi = prod + '/api/settlements';
-    var paymentsApi = prod + '/api/payments';
-    var bankAccountApi = prod + '/api/bankAccounts';
+    var contractorsApi = API_ENDPOINT + '/api/contractors';
+    var settlementsApi = API_ENDPOINT + '/api/settlements';
+    var paymentsApi = API_ENDPOINT + '/api/payments';
+    var dispositionsApi = API_ENDPOINT + '/api/dispositions';
+    var bankAccountApi = API_ENDPOINT + '/api/bankAccounts';
 
     getAllContractors();
     getAllSettlements();
     getAllOwners();
+    $("#vat_amount").hide();
+    $("#edit-vat-amount").hide();
 
 
     $.fn.datepicker.defaults.format = "yyyy-mm-dd";
@@ -33,6 +34,13 @@ $(document).ready(function () {
     $('[data-settlements-add-form]').on('submit', addSettlement);
     $('#edit_settlement').on("click", updateSettlement);
     $('[data-payments-add-form]').on('submit', addPayment);
+    $('#open-dispositions-modal').click(function (event){
+        $("#create-dispositions-modal").modal();
+    });
+    $('#create-dispositions-button').click(function (event){
+        createDispositons(event);
+    });
+
 
     function fillContractorsCombobox(contractors) {
         //$('#contractors-combobox').empty()
@@ -151,22 +159,43 @@ $(document).ready(function () {
         var selectedId = $(this).children("option:selected").val();
         fillOwnerBankAccountCombobox(selectedId);
     });
+    $("#settlement-type").change(function () {
+        var selectedId = $(this).children("option:selected").val();
+
+        switch (selectedId) {
+            case 'STANDARD_TRANSFER':
+                $("#vat_amount").hide();
+                console.log('Wybrano STANDARD');
+                $("#vat_amount").val(0);
+                break;
+            case 'SPLIT_PAYMENT_TRANSFER':
+                $("#vat_amount").show();
+                console.log('Wybrano Split payment')
+                break;
+            default:
+                console.log(`Sorry, we are out of ${expr}.`);
+        }
+
+    });
 
     function handleDatatableRender(settlementsData) {
         $('#settlements-table-body').empty()
         settlementsData.forEach(function (settlement) {
             var $datatableRowEl = createElement(settlement);
-            $datatableRowEl
-                .appendTo($('#settlements-table-body'));
+            $datatableRowEl.appendTo($('#settlements-table-body'));
+
         });
+
     }
 
     function createElement(data) {
+
         var dateOfIssue = new Date(data.dateOfIssue);
         var dateOfPayment = new Date(data.dateOfPayment);
         var formatted_dateOfIssue = dateOfIssue.getFullYear() + "-" + appendLeadingZeroes(dateOfIssue.getMonth() + 1) + "-" + appendLeadingZeroes(dateOfIssue.getDate())
         var formatted_dateOfPayment = dateOfPayment.getFullYear() + "-" + appendLeadingZeroes(dateOfPayment.getMonth() + 1) + "-" + appendLeadingZeroes(dateOfPayment.getDate())
         var $tr = $('<tr>').append(
+            $('<td align="center">').append(isCheckboxEnable(data.dispositionDtoList.length)),
             $('<td>').text(data.settlementId).hide(),
             $('<td>').text(data.contractorId).hide(),
             $('<td>').text(data.contractorName),
@@ -175,22 +204,28 @@ $(document).ready(function () {
             $('<td>').text(formatted_dateOfPayment),
             $('<td align="center">').text(data.amount),
             $('<td align="center">').text(data.paidAmount),
+            $('<td align="center">').append(isDispositionChecked(data.dispositionDtoList.length)),
             $('<td align="center">').append(isChecked(data)),
-            $('<td align="center">').text(data.bankAccountNumber),
-            $('<td align="center"><button class="btn btn-success" id="pay-settlement-button">zapłać</button>'),
             $('<td align="center"><button class="btn btn-success" id="edit-settlement-button">edytuj</button>'),
             $('<td align="center"><button class="btn btn-danger" id="delete-settlement-button">usuń</button>')
         );
         return $tr;
+
     }
 
     $('#settlements-table-body').on("click", "#delete-settlement-button", function (event) {
         var curentRow = $(this).closest('tr');
-        var id_col = curentRow.find('td:eq(0)').text();
+        var id_col = curentRow.find('td:eq(1)').text();
         deleteSettlement(id_col);
     });
 
     function fillEditForm(data) {
+        if(data.settlementTypeName=='SPLIT_PAYMENT_TRANSFER'){
+            $("#edit-vat-amount").show();
+        }
+        else {
+            $("#edit-vat-amount").hide();
+        }
         $("#edit-id").val(data.settlementId);
         $("#contractor-id").val(data.contractorId);
         $("#edit-owner-id").val(data.ownerId);
@@ -199,6 +234,8 @@ $(document).ready(function () {
         $("#edit-date-of-issue").val(data.dateOfIssue);
         $("#edit-date-of-payment").val(data.dateOfPayment);
         $("#edit-amount").val(data.amount);
+        $("#edit-vat-amount").val(data.vatAmount);
+        $("#edit-settlement-type").val(data.settlementTypeName);
         fillEditBankAccountCombobox(data.contractorId);
     }
 
@@ -221,37 +258,24 @@ $(document).ready(function () {
         event.preventDefault();
         $("#myModal").modal();
         var currentRow = $(this).closest('tr');
-        var id = currentRow.find('td:eq(0)').text();
+        var id = currentRow.find('td:eq(1)').text();
         getSettlementForEdit(id);
     });
 
-    $('#settlements-table-body').on("click", "#pay-settlement-button", function (event) {
-        event.preventDefault();
-
-        var curentRow = $(this).closest('tr');
-        var id = curentRow.find('td:eq(0)').text();
-        var paidAmount = curentRow.find('td:eq(7)').text();
-        var amount = curentRow.find('td:eq(6)').text();
-
-
-        if (getAmountToPay(amount, paidAmount) > 0) {
-            $("#paymentsModal").modal();
-            getSettlementForPayment(id)
-
-        } else {
-            $("#settled").fadeIn();
-            closeAlert();
+    function isCheckboxEnable(data){
+        if(hasDisposition(data)){
+            return $('<input type="checkbox" disabled>')
+                }
+                else {
+            return $('<input type="checkbox">')
         }
 
-
-    });
-
+    }
     function getAmountToPay(amount, paidAmount) {
         var val = parseFloat(amount);
         var val2 = parseFloat(paidAmount);
         return val - val2;
     }
-
     function isChecked(data) {
         if (isSettlementPaid(data)) {
             return $('<i class="fas fa-check"></i>')
@@ -259,6 +283,19 @@ $(document).ready(function () {
             return $('<i class="far fa-times-circle"></i>')
         }
 
+    }
+    function isDispositionChecked(data){
+        if (hasDisposition(data)) {
+            return $('<i class="fas fa-check"></i>')
+        } else {
+            return $('<i class="far fa-times-circle"></i>')
+        }
+    }
+
+    function hasDisposition(data) {
+        if (data>0) {
+            return true;
+        } else return false;
     }
 
     function isSettlementPaid(data) {
@@ -359,6 +396,8 @@ $(document).ready(function () {
         var selectedBankAccount = $("#bankAccountNumber-combobox option:selected").val();
         var selectedOwner = $("#owners-combobox option:selected").val();
         var selectedOwnerBankAccount = $("#OwnerBankAccountNumber-combobox option:selected").val();
+        var selectedSettlementType = $("#settlement-type option:selected").val();
+        var vatAmount = $("#vat_amount").val();
         var requestUrl = settlementsApi;
 
         $.ajax({
@@ -375,10 +414,14 @@ $(document).ready(function () {
                 dateOfIssue: settlementDateOfIssue,
                 dateOfPayment: settlementDateOfPayment,
                 amount: settlementAmount,
-                bankAccountNumber: selectedBankAccount
+                bankAccountNumber: selectedBankAccount,
+                settlementTypeName: selectedSettlementType,
+                vatAmount: vatAmount
+
             }),
             complete: function (data) {
                 if (data.status === 200) {
+                    $("#vat_amount").val(0);
                     getAllSettlements();
                 } else {
                     alert('Nie udało się dodać rozrachunku!')
@@ -398,6 +441,7 @@ $(document).ready(function () {
         var selectedOwner = $("#p-owner-id").val();
         var selectedOwnerBankAccount = $("#p-owner-bankAccount").val();
         var requestUrl = paymentsApi;
+
 
         $.ajax({
             url: requestUrl,
@@ -428,6 +472,49 @@ $(document).ready(function () {
 
     }
 
+    function createDispositons(event) {
+        event.preventDefault();
+        var idsList=[];
+        var dateOfTransfer = $("#date-of-transfer").val();
+        var requestUrl = dispositionsApi+"/list";
+
+        var grid = document.getElementById("settlements-table");
+        //Reference the CheckBoxes in Table.
+        var checkBoxes = grid.getElementsByTagName("INPUT");
+        //Loop through the CheckBoxes.
+        for (var i = 0; i < checkBoxes.length; i++) {
+            if (checkBoxes[i].checked) {
+                var row = checkBoxes[i].parentNode.parentNode;
+
+                idsList.push(row.cells[1].innerHTML);
+            }
+
+        }
+
+        $.ajax({
+            url: requestUrl,
+            method: 'POST',
+            processData: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: JSON.stringify({
+                dateOfExecution: dateOfTransfer,
+                idsList: idsList
+            }),
+            complete: function (data) {
+                if (data.status === 200) {
+                    getAllSettlements();
+                    $('#create-dispositions-modal').modal('hide');
+                } else {
+                    alert('Nie udało się utworzyć paczki dyspozycji!')
+                }
+            }
+        });
+        getAllSettlements();
+
+
+    }
+
     function updateSettlement() {
 
         var id = $("#edit-id").val();
@@ -440,6 +527,9 @@ $(document).ready(function () {
         var selectedOwner = $("#edit-owner-id").val();
         var selectedOwnerBankAccount = $("#edit-owner-bankAccount").val();
         var requestUrl = settlementsApi;
+        var vatAmount = $("#edit-vat-amount").val();
+        var selectedSettlementType = $("#edit-settlement-type").val();
+
         $.ajax({
             url: requestUrl,
             method: "PUT",
@@ -455,7 +545,9 @@ $(document).ready(function () {
                 dateOfIssue: settlementDateOfIssue,
                 dateOfPayment: settlementDateOfPayment,
                 amount: settlementAmount,
-                bankAccountNumber: selectedBankAccount
+                bankAccountNumber: selectedBankAccount,
+                vatAmount: vatAmount,
+                settlementTypeName: selectedSettlementType,
 
             }),
             success: function (data) {

@@ -1,6 +1,6 @@
 $(document).ready(function () {
     var prod = 'https://pacific-castle-21497.herokuapp.com';
-    var paymentsApi = prod+'/api/payments';
+    var paymentsApi = API_ENDPOINT+'/api/payments';
 
     getAllPayments();
     function handleDatatableRender(paymentsData) {

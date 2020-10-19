@@ -1,7 +1,7 @@
 $(document).ready(function () {
-    var contractorsApi = 'https://pacific-castle-21497.herokuapp.com/api/contractors';
-    var contractorStatusApi = 'https://pacific-castle-21497.herokuapp.com/api/contractors/status';
-    var bankAccountApi = 'https://pacific-castle-21497.herokuapp.com/api/bankAccounts';
+    var contractorsApi = API_ENDPOINT+'/api/contractors';
+    var contractorStatusApi = API_ENDPOINT+'/api/contractors/status';
+    var bankAccountApi = API_ENDPOINT+'/api/bankAccounts';
     getAllContractors();
 
 //*************************************BUTTONS*********************************************************************

@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    var contractorsApi = 'https://pacific-castle-21497.herokuapp.com/api/contractors';
-    var statusesApi = 'https://pacific-castle-21497.herokuapp.com/api/statuses';
+    var contractorsApi = API_ENDPOINT+'/api/contractors';
+    var statusesApi = API_ENDPOINT+'/api/statuses';
     getAllContractors();
     getAllStatuses();
 

@@ -116,4 +116,10 @@ input:checked + .slider:before {
 .button{
     margin-bottom: 15px;
 }
+.buttons-group{
+    margin-bottom: 15px;
+}
+.btn{
+    margin: 5px;
+}
 

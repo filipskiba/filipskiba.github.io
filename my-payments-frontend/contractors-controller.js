@@ -1,6 +1,6 @@
 $(document).ready(function () {
     var prod = 'https://pacific-castle-21497.herokuapp.com';
-    var apiRoot = prod + '/api/contractors';
+    var apiRoot = API_ENDPOINT + '/api/contractors';
 
     getAllContractors();
 

@@ -1,6 +1,6 @@
 $(document).ready(function () {
     var prod = 'https://pacific-castle-21497.herokuapp.com';
-    var dispositionsApi = prod + '/api/dispositions';
+    var dispositionsApi = API_ENDPOINT + '/api/dispositions';
 
     getAllDispositions();
 
