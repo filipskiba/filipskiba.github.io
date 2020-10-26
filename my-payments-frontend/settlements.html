@@ -50,127 +50,192 @@
 
 <div class="main">
     <div class="container-fluid">
+
+
         <div class="row">
-            <div class="col-md-4">
-                <div class="card bg-primary text-center card-form">
-                    <div class="card-body">
-                        <h3>Dodaj rozrachunek</h3>
-                        <p>Rodzaj rozrachunku</p>
-                        <form
-                                action="https://pacific-castle-21497.herokuapp.com/api/settlements"
-                                data-settlements-add-form
-                                method="POST"
-                        >
-                            <div class="form-group">
-                                <select id="settlement-type" class="custom-select" name="settlement-t" required>
-                                    <option value="STANDARD_TRANSFER">Standardowy</option>
-                                    <option value="SPLIT_PAYMENT_TRANSFER">Split payment</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <select id="owners-combobox" class="custom-select" name="właściciel" required>
-                                    <option disabled selected>--- wybierz podmiot ---</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <select id="OwnerBankAccountNumber-combobox" class="custom-select"
-                                        name="konto-właściciela" required>
-                                    <option disabled selected>--- wybierz konto bankowe ---</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <select id="contractors-combobox" class="custom-select" name="Kontrahent" required>
-                                    <option disabled selected>--- wybierz kontrahenta ---</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <select id="bankAccountNumber-combobox" class="custom-select" name="konto" required>
-                                    <option disabled selected>--- wybierz konto bankowe kontrahenta ---</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <input class="form-control form-control-lg" name="document"
-                                       placeholder="Dokument"
-                                       required
-                                       type="text">
-                            </div>
-
-                            <div class="form-group">
-                                <div class="input-group date" data-provide="datepicker">
-                                    <input type="text" name="date-of-issue" class="form-control" required
-                                           placeholder="Data wystawienia">
-                                    <div class="input-group-addon">
-                                        <span class="glyphicon glyphicon-th"></span>
+            <div class="col-md-12">
+                <h5>Dodaj rozrachunek</h5>
+                <form
+                        action="https://pacific-castle-21497.herokuapp.com/api/settlements"
+                        data-settlements-add-form
+                        method="POST"
+                >
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card bg-primary card-form">
+                                <div class="card-body">
+                                    <h5>Rodzaj rozrachunku</h5>
+                                    <div class="form-group form-control-sm">
+                                        <label>Typ rozrachunku</label>
+                                        <select id="settlement-type" class="custom-select" name="settlement-t"
+                                                required>
+                                            <option value="STANDARD_TRANSFER">Standardowy</option>
+                                            <option value="SPLIT_PAYMENT_TRANSFER">Split payment</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="form-group">
-                                <div class="input-group date" data-provide="datepicker">
-                                    <input type="text" name="date-of-payment" class="form-control" required
-                                           placeholder="termin płatności">
-                                    <div class="input-group-addon">
-                                        <span class="glyphicon glyphicon-th"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <input class="form-control form-control-lg" name="amount" required
-                                       placeholder="Kwota"
-                                       type="number" min="0" value="0" step=".01">
-
-                            </div>
-
-                            <div class="form-group">
-                                <input class="form-control form-control-lg" id="vat_amount" required
-                                       placeholder="Vat"
-                                       type="number" min="0" value="0" step=".01">
-
-                            </div>
-
-                            <input class="btn btn-outline-light btn-block" id="add_settlement" type="submit"
-                                   value="Zapisz">
-                        </form>
+                        </div>
                     </div>
-                </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card bg-primary card-form">
+                                <div class="card-body">
+                                    <h5>Dane właściciela</h5>
+
+                                    <div class="form-group form-control-sm">
+                                        <label>Właściciel</label>
+                                        <select id="owners-combobox" class="custom-select" name="właściciel"
+                                                required>
+                                            <option disabled selected>--- wybierz podmiot ---</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group form-control-sm">
+                                        <label>Konto właściciela</label>
+                                        <select id="OwnerBankAccountNumber-combobox" class="custom-select"
+                                                name="konto-właściciela" required>
+                                            <option disabled selected>--- wybierz konto bankowe ---</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-primary card-form">
+                                <div class="card-body">
+                                    <h5>Dane kontrahenta</h5>
+                                    <div class="form-group form-control-sm">
+                                        <label>Kontrahent</label>
+                                        <select id="contractors-combobox" class="custom-select"
+                                                name="Kontrahent"
+                                                required>
+                                            <option disabled selected>--- wybierz kontrahenta ---</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group form-control-sm">
+                                        <label>Numer bankowy kontrahenta</label>
+                                        <select id="bankAccountNumber-combobox" class="custom-select"
+                                                name="konto"
+                                                required>
+                                            <option disabled selected>--- wybierz konto bankowe kontrahenta
+                                                ---
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card bg-primary card-form">
+                                <div class="card-body">
+                                    <h5>Dokument</h5>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <label>Data wystawienia</label>
+                                            <div class="input-group date" data-provide="datepicker">
+                                                <input type="text" name="date-of-issue" class="form-control"
+                                                       required
+                                                       placeholder="Data wystawienia">
+                                                <div class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-th"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label>Termin płatności</label>
+                                            <div class="input-group date" data-provide="datepicker">
+                                                <input type="text" name="date-of-payment"
+                                                       class="form-control" required
+                                                       placeholder="termin płatności">
+                                                <div class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-th"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label>Numer dokumentu</label>
+                                            <input class="form-control form-control" name="document"
+                                                   placeholder="Dokument"
+                                                   required
+                                                   type="text">
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label>Kwota</label>
+                                            <input class="form-control form-control" name="amount"
+                                                   required
+                                                   placeholder="Kwota"
+                                                   type="number" min="0" value="0" step=".01">
+
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label id="vat_amount_label">Kwota vat</label>
+                                            <input class="form-control form-control-sm" id="vat_amount"
+                                                   required
+                                                   placeholder="Vat"
+                                                   type="number" min="0" value="0" step=".01">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-10">
+                        </div>
+                        <div class="col-md-2">
+                            <input class="btn btn-outline-primary btn-block" id="add_settlement" type="submit"
+                                   value="Zapisz" style="margin-bottom: 25px">
+                        </div>
+                    </div>
+
+
+                </form>
+
             </div>
-
-            <div class="col-md-8">
-                <div class="table-responsive-md table-bordered table-hover">
-                    <table class="table" id="settlements-table">
-                        <thead class="thead-light">
-                        <tr>
-                            <th scope="col"> </th>
-                            <th scope="col">Kontrahent</th>
-                            <th scope="col">Dokument</th>
-                            <th scope="col">Data wyst.</th>
-                            <th scope="col">Data płat.</th>
-                            <th scope="col">kwota</th>
-                            <th scope="col">zapłacono</th>
-                            <th scope="col">dyspozycja</th>
-                            <th scope="col">uregulowano</th>
-                            <th scope="col">edycja</th>
-                            <th scope="col">usuń</th>
-
-                        </tr>
-                        </thead>
-                        <tbody id="settlements-table-body">
-
-                        </tbody>
-                    </table>
-                    <button class="btn btn-success" id="open-dispositions-modal">Utwórz dyspozycje</button>
-                </div>
-
-            </div>
-
         </div>
     </div>
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive-md table-bordered table-hover">
+            <table class="table" id="settlements-table">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Kontrahent</th>
+                    <th scope="col">Typ</th>
+                    <th scope="col">Dokument</th>
+                    <th scope="col">Data wyst.</th>
+                    <th scope="col">Data płat.</th>
+                    <th scope="col">kwota</th>
+                    <th scope="col">zapłacono</th>
+                    <th scope="col">dyspozycja</th>
+                    <th scope="col">uregulowano</th>
+                    <th scope="col">edycja</th>
+                    <th scope="col">usuń</th>
+
+                </tr>
+                </thead>
+                <tbody id="settlements-table-body">
+
+                </tbody>
+            </table>
+            <button class="btn btn-success" id="open-dispositions-modal">Utwórz dyspozycje</button>
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+</div>
 </div>
 
 
