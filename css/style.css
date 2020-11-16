@@ -39,6 +39,7 @@ S
   color: #fff; }
 .item{
   text-align: left;
+  font-size: 20px;
 }
 .responsive {
   max-width: 450px;
