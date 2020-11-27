@@ -8,7 +8,8 @@ $(function () {
     var $response = $("#response");
     var $login = $("#login");
     var $userInfo = $("#userInfo").hide();
-    var endpoint = 'https://spring-security-jwt-fs.herokuapp.com'
+  //  var endpoint = 'https://spring-security-jwt-fs.herokuapp.com'
+    var endpoint = 'http://localhost:8082'
 
     // FUNCTIONS =============================================================
     function getJwtToken() {
